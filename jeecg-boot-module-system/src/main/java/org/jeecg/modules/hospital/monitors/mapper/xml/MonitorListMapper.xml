@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.hospital.monitors.mapper.MonitorListMapper">
+  <resultMap id="BaseResultMap" type="org.jeecg.modules.hospital.monitors.vo.MonitorListVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="hmid" jdbcType="INTEGER" property="hmid" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="monitdate" jdbcType="TIMESTAMP" property="monitdate" />
+    <result column="hospdate" jdbcType="TIMESTAMP" property="hospdate" />
+    <result column="hospstatus" jdbcType="VARCHAR" property="hospstatus" />
+    <result column="hospoperator" jdbcType="VARCHAR" property="hospoperator" />
+    <result column="inid" jdbcType="INTEGER" property="inid" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="modifydate" jdbcType="TIMESTAMP" property="modifydate" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="checkstatus" jdbcType="VARCHAR" property="checkstatus" />
+    <result column="checkdate" jdbcType="TIMESTAMP" property="checkdate" />
+    <result column="checkoperator" jdbcType="VARCHAR" property="checkoperator" />
+    <result column="checkreason" jdbcType="VARCHAR" property="checkreason" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <association property="hospitalmonitor" javaType="org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor"
+                 column="inid"
+                 select="org.jeecg.modules.hospital.monitor.mapper.HospitalmonitorMapper.selectByPrimaryKey">
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, hmid, `type`, monitdate, hospdate, hospstatus, hospoperator, inid, `status`, 
+    `operator`, modifydate, remark, checkstatus, checkdate, checkoperator, checkreason, 
+    create_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from monitorlist
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectLists" parameterType="org.jeecg.modules.hospital.monitors.vo.MonitorListVo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from monitorlist
+    <where>
+      <if test="id != null">
+        hmid = #{id,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  <select id="selectListsCount" parameterType="org.jeecg.modules.hospital.monitors.vo.MonitorListVo" resultType="java.lang.Integer">
+    select
+    count(1)
+    from monitorlist
+    <where>
+      <if test="id != null">
+        hmid = #{id,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from monitorlist
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.jeecg.modules.hospital.monitors.entity.MonitorList">
+    insert into monitorlist (id, hmid, `type`, 
+      monitdate, hospdate, hospstatus, 
+      hospoperator, inid, `status`, 
+      `operator`, modifydate, remark, 
+      checkstatus, checkdate, checkoperator, 
+      checkreason, create_time)
+    values (#{id,jdbcType=INTEGER}, #{hmid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
+      #{monitdate,jdbcType=TIMESTAMP}, #{hospdate,jdbcType=TIMESTAMP}, #{hospstatus,jdbcType=VARCHAR}, 
+      #{hospoperator,jdbcType=VARCHAR}, #{inid,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
+      #{operator,jdbcType=VARCHAR}, #{modifydate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{checkstatus,jdbcType=VARCHAR}, #{checkdate,jdbcType=TIMESTAMP}, #{checkoperator,jdbcType=VARCHAR}, 
+      #{checkreason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="org.jeecg.modules.hospital.monitors.entity.MonitorList">
+    insert into monitorlist
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="hmid != null">
+        hmid,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="monitdate != null">
+        monitdate,
+      </if>
+      <if test="hospdate != null">
+        hospdate,
+      </if>
+      <if test="hospstatus != null">
+        hospstatus,
+      </if>
+      <if test="hospoperator != null">
+        hospoperator,
+      </if>
+      <if test="inid != null">
+        inid,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="operator != null">
+        `operator`,
+      </if>
+      <if test="modifydate != null">
+        modifydate,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="checkstatus != null">
+        checkstatus,
+      </if>
+      <if test="checkdate != null">
+        checkdate,
+      </if>
+      <if test="checkoperator != null">
+        checkoperator,
+      </if>
+      <if test="checkreason != null">
+        checkreason,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="hmid != null">
+        #{hmid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="monitdate != null">
+        #{monitdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hospdate != null">
+        #{hospdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hospstatus != null">
+        #{hospstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="hospoperator != null">
+        #{hospoperator,jdbcType=VARCHAR},
+      </if>
+      <if test="inid != null">
+        #{inid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifydate != null">
+        #{modifydate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="checkstatus != null">
+        #{checkstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="checkdate != null">
+        #{checkdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkoperator != null">
+        #{checkoperator,jdbcType=VARCHAR},
+      </if>
+      <if test="checkreason != null">
+        #{checkreason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.jeecg.modules.hospital.monitors.entity.MonitorList">
+    update monitorlist
+    <set>
+      <if test="hmid != null">
+        hmid = #{hmid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="monitdate != null">
+        monitdate = #{monitdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hospdate != null">
+        hospdate = #{hospdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hospstatus != null">
+        hospstatus = #{hospstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="hospoperator != null">
+        hospoperator = #{hospoperator,jdbcType=VARCHAR},
+      </if>
+      <if test="inid != null">
+        inid = #{inid,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null">
+        `operator` = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="modifydate != null">
+        modifydate = #{modifydate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="checkstatus != null">
+        checkstatus = #{checkstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="checkdate != null">
+        checkdate = #{checkdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkoperator != null">
+        checkoperator = #{checkoperator,jdbcType=VARCHAR},
+      </if>
+      <if test="checkreason != null">
+        checkreason = #{checkreason,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.jeecg.modules.hospital.monitors.entity.MonitorList">
+    update monitorlist
+    set hmid = #{hmid,jdbcType=INTEGER},
+      `type` = #{type,jdbcType=VARCHAR},
+      monitdate = #{monitdate,jdbcType=TIMESTAMP},
+      hospdate = #{hospdate,jdbcType=TIMESTAMP},
+      hospstatus = #{hospstatus,jdbcType=VARCHAR},
+      hospoperator = #{hospoperator,jdbcType=VARCHAR},
+      inid = #{inid,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=VARCHAR},
+      `operator` = #{operator,jdbcType=VARCHAR},
+      modifydate = #{modifydate,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
+      checkstatus = #{checkstatus,jdbcType=VARCHAR},
+      checkdate = #{checkdate,jdbcType=TIMESTAMP},
+      checkoperator = #{checkoperator,jdbcType=VARCHAR},
+      checkreason = #{checkreason,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>
