@@ -2,6 +2,7 @@ package org.jeecg.modules.hospital.dictionary.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.modules.hospital.dictionary.entity.Dictionary;
+import org.jeecg.modules.hospital.dictionary.vo.DictionaryVo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public interface IDictionaryService extends IService<Dictionary> {
 
-    List<HashMap> queryDepartByToken(HashMap map);
+    List<DictionaryVo> queryDepartByToken(HashMap map);
 
     Integer queryDepartByTokenCount(String token);
 }

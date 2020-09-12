@@ -32,31 +32,31 @@ spring:
             enable: true
             required: true
   ## quartz定时任务,采用数据库方式
-  quartz:
-    job-store-type: jdbc
-    initialize-schema: embedded
-    #设置自动启动，默认为 true
-    auto-startup: true
-    #启动时更新己存在的Job
-    overwrite-existing-jobs: true
-    properties:
-      org:
-        quartz:
-          scheduler:
-            instanceName: MyScheduler
-            instanceId: AUTO
-          jobStore:
-            class: org.quartz.impl.jdbcjobstore.JobStoreTX
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-            tablePrefix: QRTZ_
-            isClustered: true
-            misfireThreshold: 60000
-            clusterCheckinInterval: 10000
-          threadPool:
-            class: org.quartz.simpl.SimpleThreadPool
-            threadCount: 10
-            threadPriority: 5
-            threadsInheritContextClassLoaderOfInitializingThread: true
+#  quartz:
+#    job-store-type: jdbc
+#    initialize-schema: embedded
+#    #设置自动启动，默认为 true
+#    auto-startup: true
+#    #启动时更新己存在的Job
+#    overwrite-existing-jobs: true
+#    properties:
+#      org:
+#        quartz:
+#          scheduler:
+#            instanceName: MyScheduler
+#            instanceId: AUTO
+#          jobStore:
+#            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+#            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+#            tablePrefix: QRTZ_
+#            isClustered: true
+#            misfireThreshold: 60000
+#            clusterCheckinInterval: 10000
+#          threadPool:
+#            class: org.quartz.simpl.SimpleThreadPool
+#            threadCount: 10
+#            threadPriority: 5
+#            threadsInheritContextClassLoaderOfInitializingThread: true
   #json 时间戳统一转换
   jackson:
     date-format:   yyyy-MM-dd HH:mm:ss
@@ -130,7 +130,7 @@ spring:
           url: jdbc:mysql://127.0.0.1:3306/jeecg-boot?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
           username: root
           password: 123456
-          driver-class-name: com.mysql.cj.jdbc.Driver
+          driver-class-name: com.mysql.jdbc.Driver
           # 多数据源配置
           #multi-datasource1:
           #url: jdbc:mysql://localhost:3306/jeecg-boot2?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
@@ -227,6 +227,9 @@ logging:
     org.jeecg.modules.hospital.monitor.mapper : debug
     org.jeecg.modules.hospital.monitors.mapper : debug
     org.jeecg.modules.hospital.hisuserinfo.mapper: debug
+    org.jeecg.modules.hospital.perinfo.mapper: debug
+
+
 
 
 #cas单点登录

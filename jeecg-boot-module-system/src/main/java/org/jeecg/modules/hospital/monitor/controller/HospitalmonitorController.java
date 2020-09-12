@@ -1,5 +1,7 @@
 package org.jeecg.modules.hospital.monitor.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -171,4 +173,42 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
         return super.importExcel(request, response, Hospitalmonitor.class);
     }
 
+	@ApiOperation(value="医院患者服务表-根据身份证号查询", notes="医院患者服务表-根据身份证号查询")
+	@GetMapping(value = "/percode")
+	public Result<?> add(String percode) {
+		QueryWrapper<Hospitalmonitor> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("percode",percode);
+		queryWrapper.eq("outstatus",1);
+		queryWrapper.eq("status",1);
+		Hospitalmonitor one = hospitalmonitorService.getOne(queryWrapper);
+		return Result.ok(one);
+	}
+
+	@ApiOperation(value="医院患者服务表-更新", notes="医院患者服务表-更新")
+	@PutMapping(value = "/update")
+	public Result<?> update(@RequestBody Hospitalmonitor hospitalmonitor) {
+		UpdateWrapper updateWrapper = new UpdateWrapper();
+		updateWrapper.eq("id",hospitalmonitor.getId());
+		if(hospitalmonitor.getInscode() != null){
+			updateWrapper.set("inscode",hospitalmonitor.getInscode());
+		}
+		if(hospitalmonitor.getPhone() != null){
+			updateWrapper.set("phone",hospitalmonitor.getPhone());
+		}
+		if(hospitalmonitor.getDept() != null){
+			updateWrapper.set("dept",hospitalmonitor.getDept());
+		}
+		if(hospitalmonitor.getDiagnose() != null){
+			updateWrapper.set("diagnose",hospitalmonitor.getDiagnose());
+		}
+		if(hospitalmonitor.getIncode()!= null){
+			updateWrapper.set("incode",hospitalmonitor.getIncode());
+		}
+		if(hospitalmonitor.getWardcode() != null){
+			updateWrapper.set("wardcode",hospitalmonitor.getWardcode());
+		}
+		if(hospitalmonitor.getWardcode() != null || hospitalmonitor.getIncode()!= null || hospitalmonitor.getDiagnose() != null || hospitalmonitor.getDept() != null ||hospitalmonitor.getPhone() != null || hospitalmonitor.getInscode() != null)
+		hospitalmonitorService.update(updateWrapper);
+		return Result.ok("修改成功!");
+	}
 }

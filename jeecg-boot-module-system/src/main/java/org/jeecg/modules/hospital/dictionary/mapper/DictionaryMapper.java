@@ -2,6 +2,7 @@ package org.jeecg.modules.hospital.dictionary.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.jeecg.modules.hospital.dictionary.entity.Dictionary;
+import org.jeecg.modules.hospital.dictionary.vo.DictionaryVo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public interface DictionaryMapper extends BaseMapper<Dictionary> {
 
-    List<HashMap> selectListByToken(HashMap map);
+    List<DictionaryVo> selectListByToken(HashMap<String,String> map);
 
     Integer selectListByTokenCount(String token);
 }

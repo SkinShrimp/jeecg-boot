@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.hospital.dictionary.mapper.DictionaryMapper">
-    <select id="selectListByToken" resultType="java.util.HashMap">
-        SELECT
-        	c.name,b.bed
-        FROM
-        	`hisuserinfo` a
-	    LEFT JOIN hisdeptbedinfo b ON a.hisid = b.hisid
-	    LEFT JOIN dictionary c ON c.id = b.dept where a.token=#{token1}
+    <select id="selectListByToken" resultType="org.jeecg.modules.hospital.dictionary.vo.DictionaryVo">
+    SELECT
+        c.name,
+        b.bed,
+    CASE
+		WHEN m.bedused IS NULL THEN
+		'0' ELSE m.bedused
+	END bedused
+	FROM
+		`hisuserinfo` a
+		LEFT JOIN hisdeptbedinfo b ON a.hisid = b.hisid
+		LEFT JOIN dictionary c ON c.id = b.dept
+		LEFT JOIN (
+		SELECT
+			count( dept ) bedused,
+			d.dept dept,
+			d.hisid
+		FROM
+			hospitalmonitor d
+		WHERE
+			d.outstatus = 1
+			AND d.STATUS = 1
+		GROUP BY
+			d.hisid,
+			d.dept
+		) m ON m.dept = b.dept
+		AND m.hisid = b.hisid
+    WHERE
+	    a.token = #{token}
     </select>
 
     <select id="selectListByTokenCount" resultType="java.lang.Integer">

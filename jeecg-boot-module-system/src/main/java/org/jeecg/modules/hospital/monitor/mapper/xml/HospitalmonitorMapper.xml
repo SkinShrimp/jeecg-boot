@@ -53,7 +53,6 @@
     <result column="supcode4" jdbcType="VARCHAR" property="supcode4" />
     <result column="pertype" jdbcType="VARCHAR" property="pertype" />
     <result column="areaid" jdbcType="INTEGER" property="areaid" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
     id, hisid, `type`, `name`, sex, percode, inscode, phone, indate, dept, diagnose, 
@@ -61,7 +60,7 @@
     image6, image7, image8, hospdate, hospoperator, gpsstatus, longitude, latitude, monitorstatus, 
     enddate, hospnum, checkstatus, checkdate, checkoperator, checkreason, inid, outstatus, 
     `status`, `operator`, modifydate, remark, extractstatus, gpscheckstatus, lifestatus, 
-    supcode1, supcode2, supcode3, supcode4, pertype, areaid, create_time
+    supcode1, supcode2, supcode3, supcode4, pertype, areaid
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -90,8 +89,7 @@
       `operator`, modifydate, remark, 
       extractstatus, gpscheckstatus, lifestatus, 
       supcode1, supcode2, supcode3, 
-      supcode4, pertype, areaid, 
-      create_time)
+      supcode4, pertype, areaid
     values (#{id,jdbcType=INTEGER}, #{hisid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{percode,jdbcType=VARCHAR}, 
       #{inscode,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{indate,jdbcType=TIMESTAMP}, 
@@ -108,8 +106,7 @@
       #{operator,jdbcType=VARCHAR}, #{modifydate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
       #{extractstatus,jdbcType=VARCHAR}, #{gpscheckstatus,jdbcType=VARCHAR}, #{lifestatus,jdbcType=VARCHAR}, 
       #{supcode1,jdbcType=VARCHAR}, #{supcode2,jdbcType=VARCHAR}, #{supcode3,jdbcType=VARCHAR}, 
-      #{supcode4,jdbcType=VARCHAR}, #{pertype,jdbcType=VARCHAR}, #{areaid,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP})
+      #{supcode4,jdbcType=VARCHAR}, #{pertype,jdbcType=VARCHAR}, #{areaid,jdbcType=INTEGER}
   </insert>
   <insert id="insertSelective" parameterType="org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor">
     insert into hospitalmonitor
@@ -266,9 +263,6 @@
       </if>
       <if test="areaid != null">
         areaid,
-      </if>
-      <if test="createTime != null">
-        create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -583,9 +577,6 @@
       <if test="areaid != null">
         areaid = #{areaid,jdbcType=INTEGER},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -640,8 +631,7 @@
       supcode3 = #{supcode3,jdbcType=VARCHAR},
       supcode4 = #{supcode4,jdbcType=VARCHAR},
       pertype = #{pertype,jdbcType=VARCHAR},
-      areaid = #{areaid,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      areaid = #{areaid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

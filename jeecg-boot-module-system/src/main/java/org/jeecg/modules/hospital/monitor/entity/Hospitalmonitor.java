@@ -34,11 +34,6 @@ public class Hospitalmonitor implements Serializable {
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "主键")
     private String id;
-	/**创建日期*/
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "创建日期")
-    private Date createTime;
 	/**hisid*/
 	@Excel(name = "hisid", width = 15)
     @ApiModelProperty(value = "hisid")

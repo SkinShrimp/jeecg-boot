@@ -12,6 +12,7 @@ import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.modules.hospital.dictionary.entity.Dictionary;
 import org.jeecg.modules.hospital.dictionary.service.IDictionaryService;
+import org.jeecg.modules.hospital.dictionary.vo.DictionaryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -71,17 +72,17 @@ public class DictionaryController extends JeecgController<Dictionary, IDictionar
 	@AutoLog(value = "字典表-分页列表查询")
 	@ApiOperation(value="字典表-分页列表查询", notes="字典表-分页列表查询")
 	@GetMapping(value = "/depart/list/page")
-	public Result<?> queryDepartByToken(String token1,
+	public Result<?> queryDepartByToken(String token,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
 		HashMap hashMap = new HashMap();
-		hashMap.put("token1",token1);
+		hashMap.put("token",token);
 		hashMap.put("pageSize",pageSize);
 		hashMap.put("startIndex",(pageNo-1)*pageSize);
 		Page<HashMap> page = new Page<HashMap>(pageNo, pageSize);
-		List<HashMap> pageList = dictionaryService.queryDepartByToken(hashMap);
-		Integer count = dictionaryService.queryDepartByTokenCount(token1);
+		List<DictionaryVo> pageList = dictionaryService.queryDepartByToken(hashMap);
+		Integer count = dictionaryService.queryDepartByTokenCount(token);
 		page.setSize(pageSize);
 		page.setCurrent(pageNo);
 		page.setTotal(count);
@@ -91,7 +92,7 @@ public class DictionaryController extends JeecgController<Dictionary, IDictionar
 			page.setPages(1L);
 
 		}
-		page.setRecords(pageList);
+		System.out.println(pageList);
 		return Result.ok(pageList);
 	}
 

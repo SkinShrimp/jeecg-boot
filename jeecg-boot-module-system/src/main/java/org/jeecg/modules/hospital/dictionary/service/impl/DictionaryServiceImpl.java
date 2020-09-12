@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.modules.hospital.dictionary.entity.Dictionary;
 import org.jeecg.modules.hospital.dictionary.mapper.DictionaryMapper;
 import org.jeecg.modules.hospital.dictionary.service.IDictionaryService;
+import org.jeecg.modules.hospital.dictionary.vo.DictionaryVo;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import java.util.List;
 public class DictionaryServiceImpl extends ServiceImpl<DictionaryMapper, Dictionary> implements IDictionaryService {
 
     @Override
-    public List<HashMap> queryDepartByToken(HashMap map) {
+    public List<DictionaryVo> queryDepartByToken(HashMap map) {
         return this.baseMapper.selectListByToken(map);
     }
 
