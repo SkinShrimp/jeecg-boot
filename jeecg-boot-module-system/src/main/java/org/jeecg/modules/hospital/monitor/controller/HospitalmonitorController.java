@@ -185,7 +185,7 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 	}
 
 	@ApiOperation(value="医院患者服务表-更新", notes="医院患者服务表-更新")
-	@PutMapping(value = "/update")
+	@PostMapping(value = "/update")
 	public Result<?> update(@RequestBody Hospitalmonitor hospitalmonitor) {
 		UpdateWrapper updateWrapper = new UpdateWrapper();
 		updateWrapper.eq("id",hospitalmonitor.getId());

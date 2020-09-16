@@ -33,11 +33,6 @@ public class HisUserInfo implements Serializable {
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "主键")
     private String id;
-	/**创建日期*/
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "创建日期")
-    private Date createTime;
 	/**code*/
 	@Excel(name = "code", width = 15)
     @ApiModelProperty(value = "code")

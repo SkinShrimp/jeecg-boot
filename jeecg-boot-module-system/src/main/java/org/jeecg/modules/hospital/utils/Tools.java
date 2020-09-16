@@ -24,4 +24,18 @@ public abstract class Tools {
         }
         return paramMap;
     }
+
+    /**
+     * 是否null 或者 “”
+     *
+     * @return
+     */
+    public static boolean empty(String target) {
+        if (target == null || "".equals(target) || "null".equals(target)) {
+            return true;
+        }
+
+        return false;
+
+    }
 }

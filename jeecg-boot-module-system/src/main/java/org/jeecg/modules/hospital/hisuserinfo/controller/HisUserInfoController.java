@@ -171,4 +171,14 @@ public class HisUserInfoController extends JeecgController<HisUserInfo, IHisUser
         return super.importExcel(request, response, HisUserInfo.class);
     }
 
+
+	@AutoLog(value = "登陆用户表-分页列表查询")
+	@ApiOperation(value="登陆用户表-分页列表查询", notes="登陆用户表-分页列表查询")
+	@GetMapping(value = "/user/code")
+	public Result<?> queryHisUserInfoByCode(@RequestParam String code) {
+		QueryWrapper<HisUserInfo> queryWrapper = new QueryWrapper();
+		queryWrapper.eq("code",code);
+		List<HisUserInfo> list = hisUserInfoService.list(queryWrapper);
+		return Result.ok(list!=null&&list.size()>0?list.get(0):"");
+	}
 }
