@@ -180,6 +180,8 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 		queryWrapper.eq("percode",percode);
 		queryWrapper.eq("outstatus",1);
 		queryWrapper.eq("status",1);
+		queryWrapper.eq("type","01");
+
 		Hospitalmonitor one = hospitalmonitorService.getOne(queryWrapper);
 		return Result.ok(one);
 	}

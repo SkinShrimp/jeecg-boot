@@ -2,6 +2,7 @@ package org.jeecg.modules.hospital.spotchecktask.entity;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor;
 import org.jeecg.modules.hospital.utils.TaskState;
 import org.jeecg.modules.hospital.utils.TaskType;
 import org.jeecgframework.poi.excel.annotation.Excel;
@@ -18,7 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 @Data
-@TableName("spot_check_task")
+@TableName("spot_check_task_new")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="SpotCheckTask对象", description="工作任务")
@@ -39,7 +41,7 @@ public class SpotCheckTask {
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern="yyyy-MM-dd")
     @ApiModelProperty(value = "startTime")
-    private Date startTime;
+    private Long startTime;
 
     @Excel(name = "createTime", width = 15, format = "yyyy-MM-dd")
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
@@ -53,6 +55,12 @@ public class SpotCheckTask {
     @ApiModelProperty(value = "updateTime")
     private Date updateTime;
 
+    @Excel(name = "startTimeReal", width = 15, format = "yyyy-MM-dd")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @ApiModelProperty(value = "startTimeReal")
+    private Date startTimeReal;
+
     @Excel(name = "taskType", width = 15)
     @ApiModelProperty(value = "taskType")
     private TaskType taskType;
@@ -61,8 +69,8 @@ public class SpotCheckTask {
     @ApiModelProperty(value = "hmId")
     private String hmId;
 
-    @Excel(name = "timeLength", width = 15)
-    @ApiModelProperty(value = "timeLength")
-    private String timeLength;
+
+    @TableField(exist = false)
+    private Hospitalmonitor hospitalmonitor;
 
 }

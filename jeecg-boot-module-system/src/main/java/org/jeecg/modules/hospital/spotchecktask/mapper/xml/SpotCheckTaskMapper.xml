@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeecg.modules.hospital.spotchecktask.mapper.SpotCheckTaskMapper">
+    <resultMap id="BaseResultMap" type="org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="task_state" jdbcType="VARCHAR" property="taskState" />
+        <result column="task_type" jdbcType="INTEGER" property="taskType" />
+        <result column="hm_id" jdbcType="INTEGER" property="hmId" />
+        <result column="time_length" jdbcType="INTEGER" property="timeLength" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <association property="hospitalmonitor" javaType="org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor"
+                     column="hm_id"
+                     select="org.jeecg.modules.hospital.monitor.mapper.HospitalmonitorMapper.selectByPrimaryKey">
+        </association>
+    </resultMap>
+    <select id="selectSpotCheckTasks" resultType="org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask" parameterType="org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask">
+       select s.* FROM spot_check_task_new s WHERE s.task_state = #{taskState}
+    </select>
+    <select id="selectAllById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from spot_check_task_new where id=#{id}
+    </select>
+    <select id="selectSpotCheckTasksBySpotCheckTask" resultType="org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask" parameterType="org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask">
+          select s.* FROM spot_check_task_new s
+          left join hospitalMonitor m on s.hm_id=m.id
+          WHERE s.task_state = #{taskState} and m.hisid=#{hisid} and m.dept=#{deptId}
+    </select>
+    <select id="getSpotCheckTaskByHmId" resultType="org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask" parameterType="java.lang.String" >
+            select * FROM spot_check_task_new s WHERE s.hm_id = #{id}
+            AND s.task_state ='DOING'
+    </select>
+</mapper>

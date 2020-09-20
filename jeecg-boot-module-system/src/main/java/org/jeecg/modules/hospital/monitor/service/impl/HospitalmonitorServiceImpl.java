@@ -30,4 +30,10 @@ public class HospitalmonitorServiceImpl extends ServiceImpl<HospitalmonitorMappe
     public Integer monitorRelatedListsCount(HashMap map) {
         return this.baseMapper.selectRelatedMonitorsCount(map);
     }
+
+    @Override
+    public boolean CheckHmIdWithLicit(String id, String str) {
+        List list = this.baseMapper.selectHmIdWithLicit(id, str);
+        return list!=null&&list.size()>0?true:false;
+    }
 }

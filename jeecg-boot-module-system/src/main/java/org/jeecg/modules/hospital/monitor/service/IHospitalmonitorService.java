@@ -18,4 +18,7 @@ public interface IHospitalmonitorService extends IService<Hospitalmonitor> {
     List<MonitorDictHisinfo> monitorRelatedLists(HashMap map);
 
     Integer monitorRelatedListsCount(HashMap parameterMap);
+
+    boolean CheckHmIdWithLicit(String id, String str);
+
 }

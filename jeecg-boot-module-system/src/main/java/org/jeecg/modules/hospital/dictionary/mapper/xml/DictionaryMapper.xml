@@ -5,6 +5,7 @@
     SELECT
         c.name,
         b.bed,
+        b.id,
     CASE
 		WHEN m.bedused IS NULL THEN
 		'0' ELSE m.bedused
@@ -23,6 +24,7 @@
 		WHERE
 			d.outstatus = 1
 			AND d.STATUS = 1
+			AND d.type='01'
 		GROUP BY
 			d.hisid,
 			d.dept

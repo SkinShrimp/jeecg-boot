@@ -1,6 +1,7 @@
 package org.jeecg.modules.hospital.monitor.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -9,6 +10,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.jeecg.modules.hospital.dictionary.entity.Dictionary;
+import org.jeecg.modules.hospital.hisinfo.entity.Hisinfo;
 import org.jeecgframework.poi.excel.annotation.Excel;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -247,4 +250,9 @@ public class Hospitalmonitor implements Serializable {
     @ApiModelProperty(value = "areaid")
     private String areaid;
 
+    @TableField(exist = false)
+	private Hisinfo hisinfo;
+
+    @TableField(exist = false)
+    private Dictionary dictionary;
 }

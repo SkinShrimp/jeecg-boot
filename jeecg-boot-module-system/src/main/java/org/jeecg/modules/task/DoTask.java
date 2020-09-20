@@ -1,9 +1,10 @@
 package org.jeecg.modules.task;
 
-import com.sun.javaws.security.AppContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask;
 import org.jeecg.modules.hospital.utils.TaskState;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import java.util.concurrent.Callable;
 
@@ -12,15 +13,16 @@ import java.util.concurrent.Callable;
  */
 @Slf4j
 public class DoTask implements Callable<SpotCheckTask> {
-
-
+	@Autowired
+	private ApplicationContext applicationContext;
+	@Autowired
 	private SpotCheckTask task;
 
 	private DoTaskService doTaskService;
 
 	public DoTask(SpotCheckTask task) {
 		this.task = task;
-		doTaskService = AppContextUtil.getAppContext().getBean(DoTaskService.class);
+		doTaskService = applicationContext.getBean(DoTaskService.class);
 	}
 
 	public DoTask(SpotCheckTask task, DoTaskService doTaskService) {

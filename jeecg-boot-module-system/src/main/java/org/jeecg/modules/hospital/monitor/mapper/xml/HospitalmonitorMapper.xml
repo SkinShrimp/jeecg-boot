@@ -715,4 +715,9 @@
     </where>
 
   </select>
+
+  <select id="selectHmIdWithLicit" resultType="java.util.HashMap">
+     select * From MonitorList m WHERE m.status='1' AND m.type=#{type}
+     AND DATE_FORMAT(m.monitdate,'%Y%m%d')=DATE_FORMAT(NOW(),'%Y%m%d') AND m.hmid=#{id}
+  </select>
 </mapper>

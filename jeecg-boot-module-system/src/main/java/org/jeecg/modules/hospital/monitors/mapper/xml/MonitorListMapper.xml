@@ -256,5 +256,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
+  <select id="selectUndoMonitorListCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT SUM(CASE WHEN hospstatus='0' OR hospstatus='9' THEN 1 ELSE 0 END) AS hn FROM monitorlist WHERE status='1'
+    AND DATE_FORMAT(monitdate,'%Y-%m-%d') &lt;=  DATE_FORMAT(NOW(),'%Y-%m-%d') AND hmid = #{id}
+  </select>
 </mapper>

@@ -17,4 +17,6 @@ public interface IMonitorListService extends IService<MonitorList> {
     List<MonitorListVo> queryList(MonitorListVo monitorListVo);
 
     Integer queryListCount(MonitorListVo monitorListVo);
+
+    Integer getUndoMonitorListCount(String id);
 }
