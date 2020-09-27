@@ -23,4 +23,14 @@ public enum TaskType {
         long startTime = 0L;
         return startTime;
     }
+
+    public static TaskType getTaskTypeById(String task) {
+
+        for(TaskType taskType : TaskType.values()){
+            if (taskType.getValue() == task) {
+                return taskType;
+            }
+        }
+        return null;
+    }
 }

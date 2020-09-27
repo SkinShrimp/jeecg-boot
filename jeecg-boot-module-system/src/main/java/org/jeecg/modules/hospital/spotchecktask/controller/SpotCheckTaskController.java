@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
+import java.util.List;
 
 @Api(tags="工作任务")
 @RestController
@@ -124,16 +125,23 @@ public class SpotCheckTaskController {
     }
 
     @GetMapping(value = "/getCheckUsers")
-    public Result<?> getCheckUsers( @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+    public Result<?> getCheckUsers(Hospitalmonitor hospitalmonitor, @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
                                     @RequestParam(name="pageSize", defaultValue="10") Integer pageSize){
             Page page = new Page();
             QueryWrapper<SpotCheckTask> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("task_state","DOING");
-            Integer count = spotCheckTaskService.count(queryWrapper);
+            Integer count = spotCheckTaskService.selectCheckUsersCount(hospitalmonitor);
             page.setSize(pageSize);
             page.setCurrent(pageNo);
             page.setTotal(count);
-            page = spotCheckTaskService.page(page, queryWrapper);
+            List<SpotCheckTask> spotCheckTasks = spotCheckTaskService.selectCheckUsers(hospitalmonitor,pageNo, pageSize);
+            page.setRecords(spotCheckTasks);
+            if(count != null && count!=0) {
+                page.setPages(count%pageSize==0?count%pageSize:count%pageSize+1);
+            }else{
+                page.setPages(1L);
+
+            }
             return Result.ok(page);
     }
 }

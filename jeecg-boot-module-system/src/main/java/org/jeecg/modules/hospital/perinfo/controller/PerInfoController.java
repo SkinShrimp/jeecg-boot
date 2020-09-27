@@ -48,15 +48,16 @@ public class PerInfoController extends JeecgController<PerInfo, IPerInfoService>
 	 @AutoLog(value = "住院人信息-分页列表查询")
 	 @ApiOperation(value="住院人信息-分页列表查询", notes="住院人信息-分页列表查询")
 	 @PostMapping(value = "/image/update")
-	 public Result<?> imageUpdate(@RequestParam String percode) {
+	 public Result<?> imageUpdate(@RequestParam String percode,@RequestParam Integer dept) {
 		 QueryWrapper<PerInfo> queryWrapper = new QueryWrapper();
 		 queryWrapper.eq("percode",percode);
 		 List<PerInfo> list = perInfoService.list(queryWrapper);
 		 if(list != null) {
 			 for (PerInfo perInfo : list) {
-				 if(perInfo.getImage() != null && perInfo.getImage().equals("dlgs.png")){
+				 if(perInfo.getId() !=null &&perInfo.getImage() != null && perInfo.getImage().equals("dlgs.png")){
 					 UpdateWrapper updateWrapper = new UpdateWrapper();
 					 updateWrapper.set("image",null);
+					 updateWrapper.eq("id",perInfo.getId());
 					 perInfoService.update(updateWrapper);
 				 }
 			 }
@@ -67,12 +68,14 @@ public class PerInfoController extends JeecgController<PerInfo, IPerInfoService>
 		 List<Hospitalmonitor> hospitalmonitors = hospitalmonitorService.list(wrapper);
 		 if(hospitalmonitors != null) {
 			 for (Hospitalmonitor hospitalmonitor : hospitalmonitors) {
-				 if(hospitalmonitor.getImage1() != null && hospitalmonitor.getImage1().equals("dlgs.png")){
+				 if(hospitalmonitor.getId()!= null &&hospitalmonitor.getImage1() != null && hospitalmonitor.getImage1().equals("dlgs.png")){
 					 UpdateWrapper updateWrapper = new UpdateWrapper();
 					 updateWrapper.set("image1",null);
+					 updateWrapper.set("dept",dept);
 					 if(hospitalmonitor.getCheckstatus().equals("0")){
 						 updateWrapper.set("checkstatus", 1);
 					 }
+					 updateWrapper.eq("id",hospitalmonitor.getId());
 					 hospitalmonitorService.update(updateWrapper);
 				 }
 			 }

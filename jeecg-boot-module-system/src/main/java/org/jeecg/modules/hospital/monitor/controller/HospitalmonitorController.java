@@ -213,4 +213,23 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 		hospitalmonitorService.update(updateWrapper);
 		return Result.ok("修改成功!");
 	}
+
+
+	@ApiOperation(value="医院患者服务表-根据身份证号查询", notes="医院患者服务表-根据身份证号查询")
+	@GetMapping(value = "/percode/nine")
+	public Result<?> getHospitalMonitorByPerCode(Hospitalmonitor hospitalmonitor, @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+												 @RequestParam(name="pageSize", defaultValue="10") Integer pageSize) {
+		Page<Hospitalmonitor> page = new Page<Hospitalmonitor>(pageNo, pageSize);
+		List<Hospitalmonitor> hospitalmonitors = hospitalmonitorService.selectHospitalMonitorByPerCode(hospitalmonitor, pageNo, pageSize);
+		Integer count = hospitalmonitorService.selectHospitalMonitorByPerCodeCount(hospitalmonitor);
+		page.setTotal(count);
+		if(count != null && count!=0) {
+			page.setPages(count%pageSize==0?count%pageSize:count%pageSize+1);
+		}else{
+			page.setPages(1L);
+
+		}
+		page.setRecords(hospitalmonitors);
+		return Result.ok(page);
+	}
 }

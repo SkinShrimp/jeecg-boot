@@ -720,4 +720,26 @@
      select * From MonitorList m WHERE m.status='1' AND m.type=#{type}
      AND DATE_FORMAT(m.monitdate,'%Y%m%d')=DATE_FORMAT(NOW(),'%Y%m%d') AND m.hmid=#{id}
   </select>
+
+  <select id="selectHospitalMonitorByPerCode" resultType="java.util.HashMap">
+    SELECT a.* FROM hospitalmonitor a left join hisuserinfo b on b.hisid = a.hisid
+        where b.token=#{hospitalmonitor.token} and (b.authority_id like '%9%' or b.dept=a.dept) and a.outstatus=1 and a.status =1 and a.type='01'
+        <if test="hospitalmonitor.name != null and hospitalmonitor.name != ''">
+              and a.name like concat('%',#{hospitalmonitor.name},'%')
+        </if>
+        <if test="hospitalmonitor.percode != null and hospitalmonitor.percode != ''">
+             and a.percode like concat('%',#{hospitalmonitor.percode},'%')
+        </if>
+        LIMIT ${startIndex},${pageSize}
+  </select>
+  <select id="selectHospitalMonitorByPerCodeCount" resultType="java.lang.Integer" parameterType="org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor">
+      SELECT count(1) FROM hospitalmonitor a left join hisuserinfo b on b.hisid = a.hisid
+      where b.token=#{token} and (b.authority_id like '%9%' or b.dept=a.dept) and a.outstatus=1 and a.status =1 and a.type='01'
+      <if test="name != null and name != ''">
+        and a.name like concat('%',#{name},'%')
+      </if>
+      <if test="percode != null and percode != ''">
+        and a.percode like concat('%',#{percode},'%')
+      </if>
+  </select>
 </mapper>

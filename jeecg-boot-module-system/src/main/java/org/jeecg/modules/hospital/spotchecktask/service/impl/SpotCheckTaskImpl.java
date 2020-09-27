@@ -1,6 +1,7 @@
 package org.jeecg.modules.hospital.spotchecktask.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor;
 import org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask;
 import org.jeecg.modules.hospital.spotchecktask.mapper.SpotCheckTaskMapper;
 import org.jeecg.modules.hospital.spotchecktask.service.ISpotCheckTaskService;
@@ -30,6 +31,16 @@ public class SpotCheckTaskImpl  extends ServiceImpl<SpotCheckTaskMapper, SpotChe
     @Override
     public SpotCheckTask getSpotCheckTaskByHmId(String id) {
         return this.baseMapper.getSpotCheckTaskByHmId(id);
+    }
+
+    @Override
+    public List<SpotCheckTask> selectCheckUsers(Hospitalmonitor hospitalmonitor, Integer pageNo, Integer pageSize) {
+        return this.baseMapper.selectCheckUsers(hospitalmonitor,(pageNo-1)*pageNo,pageSize);
+    }
+
+    @Override
+    public Integer selectCheckUsersCount(Hospitalmonitor hospitalmonitor) {
+        return this.baseMapper.selectCheckUsersCount(hospitalmonitor);
     }
 
 

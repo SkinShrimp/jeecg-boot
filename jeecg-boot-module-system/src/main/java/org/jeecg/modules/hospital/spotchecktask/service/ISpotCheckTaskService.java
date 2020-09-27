@@ -1,6 +1,7 @@
 package org.jeecg.modules.hospital.spotchecktask.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor;
 import org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask;
 import org.jeecg.modules.hospital.spotchecktask.vo.SpotCheckTaskVo;
 
@@ -13,4 +14,8 @@ public interface ISpotCheckTaskService extends IService<SpotCheckTask> {
 
     List<SpotCheckTask> getSpotCheckTasks(SpotCheckTaskVo spotCheckTask);
     SpotCheckTask getSpotCheckTaskByHmId(String id);
+
+    List<SpotCheckTask> selectCheckUsers(Hospitalmonitor hospitalmonitor, Integer pageNo, Integer pageSize);
+
+    Integer selectCheckUsersCount(Hospitalmonitor hospitalmonitor);
 }

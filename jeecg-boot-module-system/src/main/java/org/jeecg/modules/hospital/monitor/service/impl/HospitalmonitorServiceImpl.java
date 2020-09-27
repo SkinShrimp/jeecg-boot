@@ -36,4 +36,14 @@ public class HospitalmonitorServiceImpl extends ServiceImpl<HospitalmonitorMappe
         List list = this.baseMapper.selectHmIdWithLicit(id, str);
         return list!=null&&list.size()>0?true:false;
     }
+
+    @Override
+    public List<Hospitalmonitor> selectHospitalMonitorByPerCode(Hospitalmonitor hospitalmonitor, Integer pageNo, Integer pageSize) {
+        return this.baseMapper.selectHospitalMonitorByPerCode(hospitalmonitor, (pageNo-1)*pageSize, pageSize);
+    }
+
+    @Override
+    public Integer selectHospitalMonitorByPerCodeCount(Hospitalmonitor hospitalmonitor) {
+        return this.baseMapper.selectHospitalMonitorByPerCodeCount(hospitalmonitor);
+    }
 }

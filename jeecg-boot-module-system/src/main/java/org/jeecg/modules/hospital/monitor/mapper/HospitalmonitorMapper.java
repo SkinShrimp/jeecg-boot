@@ -19,4 +19,8 @@ public interface HospitalmonitorMapper extends BaseMapper<Hospitalmonitor> {
     Integer selectRelatedMonitorsCount(HashMap map);
 
     List selectHmIdWithLicit(@Param("id") String id, @Param("type") String type);
+
+    List<Hospitalmonitor> selectHospitalMonitorByPerCode(@Param("hospitalmonitor") Hospitalmonitor hospitalmonitor, @Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+    Integer selectHospitalMonitorByPerCodeCount(Hospitalmonitor hospitalmonitor);
 }

@@ -5,7 +5,7 @@
     SELECT
         c.name,
         b.bed,
-        b.id,
+        c.id,
     CASE
 		WHEN m.bedused IS NULL THEN
 		'0' ELSE m.bedused

@@ -5,10 +5,11 @@
         <id column="id" jdbcType="INTEGER" property="id" />
         <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-        <result column="task_state" jdbcType="VARCHAR" property="taskState" />
-        <result column="task_type" jdbcType="INTEGER" property="taskType" />
+        <result column="task_state"  property="taskState" typeHandler="org.jeecg.modules.handler.TaskStateHandler"/>
+        <result column="task_type" property="taskType" typeHandler="org.jeecg.modules.handler.TaskTypeHandler" />
+
         <result column="hm_id" jdbcType="INTEGER" property="hmId" />
-        <result column="time_length" jdbcType="INTEGER" property="timeLength" />
+        <result column="start_time_real" jdbcType="TIMESTAMP" property="startTimeReal" />
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
         <association property="hospitalmonitor" javaType="org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor"
                      column="hm_id"
@@ -29,5 +30,28 @@
     <select id="getSpotCheckTaskByHmId" resultType="org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask" parameterType="java.lang.String" >
             select * FROM spot_check_task_new s WHERE s.hm_id = #{id}
             AND s.task_state ='DOING'
+    </select>
+    <select id="selectCheckUsers" resultMap="BaseResultMap">
+        select a.* from spot_check_task_new a
+        left join hospitalmonitor b on b.id = a.hm_id
+        where a.task_state ='DOING' LIMIT #{startIndex},#{pageSize}
+        <if test="hospitalmonitor.name != null and hospitalmonitor.name != ''">
+            and b.name like concat('%',#{hospitalmonitor.name},'%')
+        </if>
+        <if test="hospitalmonitor.percode != null and hospitalmonitor.percode != ''">
+            and b.percode like concat('%',#{hospitalmonitor.percode},'%')
+        </if>
+    </select>
+
+    <select id="selectCheckUsersCount" resultType="java.lang.Integer">
+        select count(1) from spot_check_task_new a
+        left join hospitalmonitor b on b.id = a.hm_id
+        where a.task_state ='DOING'
+        <if test="name != null and name != ''">
+            and b.name like concat('%',#{name},'%')
+        </if>
+        <if test="percode != null and percode != ''">
+            and b.percode like concat('%',#{percode},'%')
+        </if>
     </select>
 </mapper>

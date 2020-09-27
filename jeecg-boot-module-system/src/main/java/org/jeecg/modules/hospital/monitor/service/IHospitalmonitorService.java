@@ -21,4 +21,7 @@ public interface IHospitalmonitorService extends IService<Hospitalmonitor> {
 
     boolean CheckHmIdWithLicit(String id, String str);
 
+    List<Hospitalmonitor> selectHospitalMonitorByPerCode(Hospitalmonitor hospitalmonitor, Integer pageNo, Integer pageSize);
+
+    Integer selectHospitalMonitorByPerCodeCount(Hospitalmonitor hospitalmonitor);
 }

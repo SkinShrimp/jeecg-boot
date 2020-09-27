@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 @Data
 public class DictionaryVo implements Serializable {
+    private Long id;
     private String name;
     private Integer bed;
     private Integer bedused;

@@ -255,4 +255,8 @@ public class Hospitalmonitor implements Serializable {
 
     @TableField(exist = false)
     private Dictionary dictionary;
+
+
+    @TableField(exist = false)
+    private String token;
 }
