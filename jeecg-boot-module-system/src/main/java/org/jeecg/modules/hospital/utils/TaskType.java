@@ -25,9 +25,11 @@ public enum TaskType {
     }
 
     public static TaskType getTaskTypeById(String task) {
-
+        if(task==null){
+            return null;
+        }
         for(TaskType taskType : TaskType.values()){
-            if (taskType.getValue() == task) {
+            if (taskType.getName().equals(task)) {
                 return taskType;
             }
         }

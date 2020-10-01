@@ -19,7 +19,7 @@ public enum TaskState {
     public static TaskState getTaskStateById(String task) {
 
         for(TaskState taskState : TaskState.values()){
-            if (taskState.getValue() == task) {
+            if (taskState.getName().equals(task)) {
                 return taskState;
             }
         }

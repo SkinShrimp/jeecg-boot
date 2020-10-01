@@ -1,12 +1,12 @@
 package org.jeecg.modules.hospital.spotchecktask.controller;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.modules.hospital.dictionary.entity.Dictionary;
 import org.jeecg.modules.hospital.dictionary.service.IDictionaryService;
 import org.jeecg.modules.hospital.hisinfo.entity.Hisinfo;
@@ -20,6 +20,7 @@ import org.jeecg.modules.hospital.utils.TaskState;
 import org.jeecg.modules.hospital.utils.TaskType;
 import org.jeecg.modules.task.TaskExecutionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
@@ -29,26 +30,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/hospital/spotCheckTask")
 @Slf4j
-public class SpotCheckTaskController {
+public class SpotCheckTaskController{
     @Autowired
     private ISpotCheckTaskService spotCheckTaskService;
-    @Autowired
-    private TaskExecutionService taskExecutionService;
     @Autowired
     private IHospitalmonitorService hospitalmonitorService;
     @Autowired
     private IDictionaryService dictionaryService;
     @Autowired
     private IHisinfoService hisinfoService;
+    @Autowired
+    private TaskExecutionService taskExecutionService;
 
     /**
      * 接收到在院抽查通知 25
      */
     @PostMapping(value = "/check")
-    private void setSpotCheck(@RequestBody SpotCheckTaskVo spotCheckTask) {
+    public void setSpotCheck(@RequestBody SpotCheckTaskVo spotCheckTask) {
+
         if(spotCheckTask!=null && spotCheckTask.getHospitalmonitors()!=null && spotCheckTask.getHospitalmonitors().size()>0) {
             for (int i = 0; i < spotCheckTask.getHmIds().size(); i++) {
-                Hospitalmonitor hospitalMonitor = hospitalmonitorService.getById(spotCheckTask.getHmIds().get(i).toString());
+                Hospitalmonitor hospitalMonitor = this.hospitalmonitorService.getById(spotCheckTask.getHmIds().get(i).toString());
                 Dictionary dictionary = dictionaryService.getById(hospitalMonitor.getDept());
                 hospitalMonitor.setDictionary(dictionary);
                 Hisinfo hisinfo = hisinfoService.getById(hospitalMonitor.getHisid());
@@ -64,7 +66,7 @@ public class SpotCheckTaskController {
                 update.set("extractstatus", hospitalMonitor.getExtractstatus());
                 update.eq("id",hospitalMonitor.getId());
 
-                hospitalmonitorService.update(update);
+                this.hospitalmonitorService.update(update);
                 // 处理任务
                 if ("0".equals(hospitalMonitor.getExtractstatus())) {
                     // 取消抽查
