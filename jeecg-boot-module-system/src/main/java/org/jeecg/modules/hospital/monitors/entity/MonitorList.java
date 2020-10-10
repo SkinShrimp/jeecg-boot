@@ -1,6 +1,7 @@
 package org.jeecg.modules.hospital.monitors.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -33,11 +34,6 @@ public class MonitorList implements Serializable {
 	@TableId(type = IdType.ASSIGN_ID)
     @ApiModelProperty(value = "主键")
     private String id;
-	/**创建日期*/
-	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "创建日期")
-    private Date createTime;
 	/**hmid*/
 	@Excel(name = "hmid", width = 15)
     @ApiModelProperty(value = "hmid")
@@ -107,4 +103,9 @@ public class MonitorList implements Serializable {
     @ApiModelProperty(value = "checkreason")
     private String checkreason;
 
+    @TableField(exist = false)
+	private String monitorstatus;
+
+    @TableField(exist = false)
+    private String gpscheckstatus;
 }

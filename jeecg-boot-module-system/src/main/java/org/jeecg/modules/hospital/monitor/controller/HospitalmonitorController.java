@@ -13,6 +13,7 @@ import org.jeecg.modules.hospital.dictionary.service.IDictionaryService;
 import org.jeecg.modules.hospital.hisinfo.service.IHisinfoService;
 import org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor;
 import org.jeecg.modules.hospital.monitor.service.IHospitalmonitorService;
+import org.jeecg.modules.hospital.monitor.vo.HospitalMonitorVo;
 import org.jeecg.modules.hospital.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -104,6 +105,12 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 		hospitalmonitorService.updateById(hospitalmonitor);
 		return Result.ok("编辑成功!");
 	}
+
+	@GetMapping(value = "/detail")
+	public HospitalMonitorVo detail(Hospitalmonitor hospitalmonitor) {
+		return hospitalmonitorService.queryByid(hospitalmonitor);
+	}
+
 	
 	/**
 	 *   通过id删除

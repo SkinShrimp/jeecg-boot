@@ -15,7 +15,7 @@ public abstract class Tools {
             Map.Entry me = (Map.Entry) itr.next();
             Object ok = me.getKey();
             String[] ov = (String[])me.getValue();
-            if(ov != null ) {
+            if(ov != null && !ov[0].startsWith("createTime")) {
                 paramMap.put(ok.toString(), ov[0]);
             }
         }

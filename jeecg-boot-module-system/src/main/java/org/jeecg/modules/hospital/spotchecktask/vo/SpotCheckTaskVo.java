@@ -25,6 +25,7 @@ public class SpotCheckTaskVo {
 
     private String hmId;
 
+    private Date startTimeReal;
 
     private Hospitalmonitor hospitalmonitor;
 

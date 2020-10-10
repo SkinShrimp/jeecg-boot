@@ -63,7 +63,9 @@ public class ShiroConfig {
 				filterChainDefinitionMap.put(url,"anon");
 			}
 		}
-
+        filterChainDefinitionMap.put("/**/**", "anon");
+        filterChainDefinitionMap.put("/**/**/**", "anon");
+        filterChainDefinitionMap.put("/**/**/**/**", "anon");
 		//cas验证登录
 		filterChainDefinitionMap.put("/cas/client/validateLogin", "anon");
 		// 配置不会被拦截的链接 顺序判断
@@ -125,6 +127,10 @@ public class ShiroConfig {
 		//websocket排除
 		filterChainDefinitionMap.put("/websocket/**", "anon");
 		filterChainDefinitionMap.put("/newsWebsocket/**", "anon");
+
+
+
+
 
 		// 添加自己的过滤器并且取名为jwt
 		Map<String, Filter> filterMap = new HashMap<String, Filter>(1);

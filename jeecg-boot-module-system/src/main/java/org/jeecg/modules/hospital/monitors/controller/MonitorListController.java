@@ -1,12 +1,16 @@
 package org.jeecg.modules.hospital.monitors.controller;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.base.controller.JeecgController;
+import org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor;
+import org.jeecg.modules.hospital.monitor.service.IHospitalmonitorService;
 import org.jeecg.modules.hospital.monitors.entity.MonitorList;
 import org.jeecg.modules.hospital.monitors.service.IMonitorListService;
 import org.jeecg.modules.hospital.monitors.vo.MonitorListVo;
@@ -32,7 +36,8 @@ import java.util.List;
 public class MonitorListController extends JeecgController<MonitorList, IMonitorListService> {
 	@Autowired
 	private IMonitorListService monitorListService;
-	
+	@Autowired
+	private IHospitalmonitorService hospitalmonitorService;
 	/**
 	 * 分页列表查询
 	 *
@@ -78,7 +83,23 @@ public class MonitorListController extends JeecgController<MonitorList, IMonitor
 		monitorListService.save(monitorList);
 		return Result.ok("添加成功！");
 	}
-	
+
+	@PostMapping(value = "/update")
+	public Result<?> update(@RequestBody MonitorList monitorList) {
+		UpdateWrapper<Hospitalmonitor> update = new UpdateWrapper<Hospitalmonitor>();
+		update.eq("id",monitorList.getHmid());
+		if(StringUtils.isNotBlank(monitorList.getMonitorstatus())){
+			update.set("monitorstatus",monitorList.getMonitorstatus());
+		}
+		if(StringUtils.isNotBlank(monitorList.getGpscheckstatus())){
+			update.set("gpscheckstatus",monitorList.getGpscheckstatus());
+		}
+		if(StringUtils.isNotBlank(monitorList.getMonitorstatus()) || StringUtils.isNotBlank(monitorList.getGpscheckstatus()))
+		hospitalmonitorService.update(update);
+		monitorListService.updateMonitorById(monitorList);
+		return Result.ok("编辑成功!");
+	}
+
 	/**
 	 *  编辑
 	 *

@@ -2,6 +2,7 @@ package org.jeecg.modules.hospital.monitor.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor;
+import org.jeecg.modules.hospital.monitor.vo.HospitalMonitorVo;
 import org.jeecg.modules.hospital.monitor.vo.MonitorDictHisinfo;
 
 import java.util.HashMap;
@@ -24,4 +25,6 @@ public interface IHospitalmonitorService extends IService<Hospitalmonitor> {
     List<Hospitalmonitor> selectHospitalMonitorByPerCode(Hospitalmonitor hospitalmonitor, Integer pageNo, Integer pageSize);
 
     Integer selectHospitalMonitorByPerCodeCount(Hospitalmonitor hospitalmonitor);
+
+    HospitalMonitorVo queryByid(Hospitalmonitor hospitalmonitor);
 }

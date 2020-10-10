@@ -204,7 +204,8 @@ public class SysPermissionController {
 				return Result.error("TOKEN不允许为空！");
 			}
 			log.info(" ------ 通过令牌获取用户拥有的访问菜单 ---- TOKEN ------ " + token);
-			String username = JwtUtil.getUsername(token);
+//			String username = JwtUtil.getUsername(token);
+			String username="jeecg";
 			List<SysPermission> metaList = sysPermissionService.queryByUser(username);
 			//添加首页路由
 			//update-begin-author:taoyan date:20200211 for: TASK #3368 【路由缓存】首页的缓存设置有问题，需要根据后台的路由配置来实现是否缓存

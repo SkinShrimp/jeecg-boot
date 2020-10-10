@@ -33,4 +33,9 @@ public class MonitorListServiceImpl extends ServiceImpl<MonitorListMapper, Monit
     public Integer getUndoMonitorListCount(String id) {
         return this.baseMapper.selectUndoMonitorListCount(id);
     }
+
+    @Override
+    public void updateMonitorById(MonitorList monitorList) {
+        this.baseMapper.updateMonitorById(monitorList);
+    }
 }

@@ -123,7 +123,9 @@ public class SysDictController {
 		Result<List<DictModel>> result = new Result<List<DictModel>>();
 		List<DictModel> ls = null;
 		try {
-			if(dictCode.indexOf(",")!=-1) {
+//			if(dictCode.indexOf(",")!=-1) {
+			if(false) {
+
 				//关联表字典（举例：sys_user,realname,id）
 				String[] params = dictCode.split(",");
 				

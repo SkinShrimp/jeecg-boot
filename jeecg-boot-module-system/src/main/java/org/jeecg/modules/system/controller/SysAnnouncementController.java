@@ -19,8 +19,11 @@ import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.message.websocket.WebSocket;
 import org.jeecg.modules.system.entity.SysAnnouncement;
 import org.jeecg.modules.system.entity.SysAnnouncementSend;
+import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.service.ISysAnnouncementSendService;
 import org.jeecg.modules.system.service.ISysAnnouncementService;
+import org.jeecg.modules.system.service.ISysUserService;
+import org.jeecg.modules.system.service.impl.SysUserServiceImpl;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
@@ -271,14 +274,17 @@ public class SysAnnouncementController {
 	public Result<Map<String,Object>> listByUser() {
 		Result<Map<String,Object>> result = new Result<Map<String,Object>>();
 		LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
-		String userId = sysUser.getId();
+//		String userId = sysUser.getId();
+		String userId = "a75d45a015c44384a04449ee80dc3503";
 		// 1.将系统消息补充到用户通告阅读标记表中
-		Collection<String> anntIds = sysAnnouncementSendService.queryByUserId(userId);
+		Collection<String> anntIds = sysAnnouncementSendService.queryByUserId("a75d45a015c44384a04449ee80dc3503");
+
+//		Collection<String> anntIds = sysAnnouncementSendService.queryByUserId(userId);
 		LambdaQueryWrapper<SysAnnouncement> querySaWrapper = new LambdaQueryWrapper<SysAnnouncement>();
 		querySaWrapper.eq(SysAnnouncement::getMsgType,CommonConstant.MSG_TYPE_ALL); // 全部人员
 		querySaWrapper.eq(SysAnnouncement::getDelFlag,CommonConstant.DEL_FLAG_0.toString());  // 未删除
 		querySaWrapper.eq(SysAnnouncement::getSendStatus, CommonConstant.HAS_SEND); //已发布
-		querySaWrapper.ge(SysAnnouncement::getEndTime, sysUser.getCreateTime()); //新注册用户不看结束通知
+//		querySaWrapper.ge(SysAnnouncement::getEndTime, sysUser.getCreateTime()); //新注册用户不看结束通知
 		if(anntIds!=null&&anntIds.size()>0) {
 			querySaWrapper.notIn(SysAnnouncement::getId, anntIds);
 		}

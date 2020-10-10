@@ -3,6 +3,7 @@ package org.jeecg.modules.hospital.monitor.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor;
+import org.jeecg.modules.hospital.monitor.vo.HospitalMonitorVo;
 import org.jeecg.modules.hospital.monitor.vo.MonitorDictHisinfo;
 
 import java.util.HashMap;
@@ -23,4 +24,6 @@ public interface HospitalmonitorMapper extends BaseMapper<Hospitalmonitor> {
     List<Hospitalmonitor> selectHospitalMonitorByPerCode(@Param("hospitalmonitor") Hospitalmonitor hospitalmonitor, @Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
 
     Integer selectHospitalMonitorByPerCodeCount(Hospitalmonitor hospitalmonitor);
+
+    HospitalMonitorVo selectByHosId(Hospitalmonitor hospitalmonitor);
 }

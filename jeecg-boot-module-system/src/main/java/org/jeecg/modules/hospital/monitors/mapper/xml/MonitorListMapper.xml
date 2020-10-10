@@ -18,7 +18,6 @@
     <result column="checkdate" jdbcType="TIMESTAMP" property="checkdate" />
     <result column="checkoperator" jdbcType="VARCHAR" property="checkoperator" />
     <result column="checkreason" jdbcType="VARCHAR" property="checkreason" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <association property="hospitalmonitor" javaType="org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor"
                  column="inid"
                  select="org.jeecg.modules.hospital.monitor.mapper.HospitalmonitorMapper.selectByPrimaryKey">
@@ -26,8 +25,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, hmid, `type`, monitdate, hospdate, hospstatus, hospoperator, inid, `status`, 
-    `operator`, modifydate, remark, checkstatus, checkdate, checkoperator, checkreason, 
-    create_time
+    `operator`, modifydate, remark, checkstatus, checkdate, checkoperator, checkreason
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -65,7 +63,7 @@
       hospoperator, inid, `status`, 
       `operator`, modifydate, remark, 
       checkstatus, checkdate, checkoperator, 
-      checkreason, create_time)
+      checkreason)
     values (#{id,jdbcType=INTEGER}, #{hmid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
       #{monitdate,jdbcType=TIMESTAMP}, #{hospdate,jdbcType=TIMESTAMP}, #{hospstatus,jdbcType=VARCHAR}, 
       #{hospoperator,jdbcType=VARCHAR}, #{inid,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
@@ -123,9 +121,6 @@
       </if>
       <if test="checkreason != null">
         checkreason,
-      </if>
-      <if test="createTime != null">
-        create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -230,9 +225,6 @@
       <if test="checkreason != null">
         checkreason = #{checkreason,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -252,12 +244,24 @@
       checkstatus = #{checkstatus,jdbcType=VARCHAR},
       checkdate = #{checkdate,jdbcType=TIMESTAMP},
       checkoperator = #{checkoperator,jdbcType=VARCHAR},
-      checkreason = #{checkreason,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+      checkreason = #{checkreason,jdbcType=VARCHAR}
+          where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectUndoMonitorListCount" resultType="java.lang.Integer" parameterType="java.lang.String">
     SELECT SUM(CASE WHEN hospstatus='0' OR hospstatus='9' THEN 1 ELSE 0 END) AS hn FROM monitorlist WHERE status='1'
     AND DATE_FORMAT(monitdate,'%Y-%m-%d') &lt;=  DATE_FORMAT(NOW(),'%Y-%m-%d') AND hmid = #{id}
   </select>
+  <update id="updateMonitorById">
+        update monitorlist h
+    <set>
+--         h.hospnum=(Select Count(1) From monitorlist m Where m.status='1' and (m.hospstatus='0' or m.hospstatus='9') and DATE_FORMAT(m.monitdate,'%Y-%m-%d') &lt; DATE_FORMAT(NOW(),'%Y-%m-%d') and m.hmid=h.id ),
+      <if test="hospstatus!=null">
+        h.hospstatus = #{hospstatus,jdbcType=VARCHAR},
+      </if>
+      <if test="remark!=null">
+         h.remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+          where h.id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

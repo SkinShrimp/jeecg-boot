@@ -638,9 +638,11 @@
 
   <select id="selectRelatedMonitors" resultType="org.jeecg.modules.hospital.monitor.vo.MonitorDictHisinfo">
     select a.*,b.name hospitalName,c.name dictName from hospitalmonitor a left join hisinfo b on a.hisid=b.id left join dictionary c on c.id = a.dept
+
     <where>
+      (a.type='01' OR a.type='05')
       <if test="percode != null and percode !=''">
-        a.percode like concat('%',#{percode},'%')
+        and a.percode like concat('%',#{percode},'%')
       </if>
       <if test="name != null and name !=''">
         and a.name like concat('%',#{name},'%')
@@ -673,14 +675,24 @@
         and a.dept = #{dept}
       </if>
     </where>
+    ORDER BY
+    <choose>
+      <when test="column!=null">
+        ${column} ${order}
+      </when>
+      <otherwise>
+        a.indate DESC
+      </otherwise>
+    </choose>
     LIMIT ${startIndex}, ${pageSize}
 
   </select>
   <select id="selectRelatedMonitorsCount" resultType="java.lang.Integer">
     select count(1) from hospitalmonitor a left join hisinfo b on a.hisid=b.id left join dictionary c on c.id = a.dept
     <where>
+      (a.type='01' OR a.type='05')
       <if test="percode != null and percode !=''">
-        a.percode like concat('%',#{percode},'%')
+       and a.percode like concat('%',#{percode},'%')
       </if>
       <if test="name != null and name !=''">
         and a.name like concat('%',#{name},'%')
@@ -741,5 +753,11 @@
       <if test="percode != null and percode != ''">
         and a.percode like concat('%',#{percode},'%')
       </if>
+  </select>
+  <select id="selectByHosId" parameterType="org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor" resultType="org.jeecg.modules.hospital.monitor.vo.HospitalMonitorVo">
+        select a.name,a.sex,a.percode,a.phone,a.inscode,a.incode,a.indate, c.name as 'deptName', b.name as 'hisName',
+         a.diagnose,a.wardcode,a.outdate,a.moneycode,a.money from hospitalmonitor a
+         left join hisinfo b on b.id = a.hisid
+          left join dictionary c on c.id = a.dept where a.id = #{id}
   </select>
 </mapper>

@@ -19,6 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+
 @Data
 @TableName("spot_check_task_new")
 @Accessors(chain = true)
@@ -49,16 +50,8 @@ public class SpotCheckTask {
     @ApiModelProperty(value = "createTime")
     private Date createTime;
 
-    @Excel(name = "updateTime", width = 15, format = "yyyy-MM-dd")
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    @ApiModelProperty(value = "updateTime")
     private Date updateTime;
 
-    @Excel(name = "startTimeReal", width = 15, format = "yyyy-MM-dd")
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    @ApiModelProperty(value = "startTimeReal")
     private Date startTimeReal;
 
     @Excel(name = "taskType", width = 15)

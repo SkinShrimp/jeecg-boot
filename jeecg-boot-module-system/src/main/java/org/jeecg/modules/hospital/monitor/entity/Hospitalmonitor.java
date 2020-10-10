@@ -259,4 +259,5 @@ public class Hospitalmonitor implements Serializable {
 
     @TableField(exist = false)
     private String token;
+
 }

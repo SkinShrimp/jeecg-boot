@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor;
 import org.jeecg.modules.hospital.monitor.mapper.HospitalmonitorMapper;
 import org.jeecg.modules.hospital.monitor.service.IHospitalmonitorService;
+import org.jeecg.modules.hospital.monitor.vo.HospitalMonitorVo;
 import org.jeecg.modules.hospital.monitor.vo.MonitorDictHisinfo;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +46,10 @@ public class HospitalmonitorServiceImpl extends ServiceImpl<HospitalmonitorMappe
     @Override
     public Integer selectHospitalMonitorByPerCodeCount(Hospitalmonitor hospitalmonitor) {
         return this.baseMapper.selectHospitalMonitorByPerCodeCount(hospitalmonitor);
+    }
+
+    @Override
+    public HospitalMonitorVo queryByid(Hospitalmonitor hospitalmonitor) {
+        return this.baseMapper.selectByHosId(hospitalmonitor);
     }
 }

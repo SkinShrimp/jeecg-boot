@@ -3,7 +3,7 @@ server:
   tomcat:
     max-swallow-size: -1
   servlet:
-    context-path: /jeecg-boot
+    context-path:
   compression:
     enabled: true
     min-response-size: 1024
@@ -59,8 +59,9 @@ spring:
 #            threadsInheritContextClassLoaderOfInitializingThread: true
   #json 时间戳统一转换
   jackson:
-    date-format:   yyyy-MM-dd HH:mm:ss
-    time-zone:   GMT+8
+    serialization: { WRITE_DATES_AS_TIMESTAMPS: true }
+  #    date-format:   yyyy-MM-dd HH:mm:ss
+#    time-zone:   GMT+8
   jpa:
     open-in-view: false
   activiti:

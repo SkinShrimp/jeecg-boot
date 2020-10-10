@@ -16,6 +16,22 @@
                      select="org.jeecg.modules.hospital.monitor.mapper.HospitalmonitorMapper.selectByPrimaryKey">
         </association>
     </resultMap>
+
+    <resultMap id="BaseResultVoMap" type="org.jeecg.modules.hospital.spotchecktask.vo.SpotCheckTaskVo">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="start_time" jdbcType="INTEGER" property="startTime" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="task_state"  property="taskState" typeHandler="org.jeecg.modules.handler.TaskStateHandler"/>
+        <result column="task_type" property="taskType" typeHandler="org.jeecg.modules.handler.TaskTypeHandler" />
+
+        <result column="hm_id" jdbcType="INTEGER" property="hmId" />
+        <result column="start_time_real" jdbcType="TIMESTAMP" property="startTimeReal" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <association property="hospitalmonitor" javaType="org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor"
+                     column="hm_id"
+                     select="org.jeecg.modules.hospital.monitor.mapper.HospitalmonitorMapper.selectByPrimaryKey">
+        </association>
+    </resultMap>
     <select id="selectSpotCheckTasks" resultMap="BaseResultMap" parameterType="org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask">
        select s.* FROM spot_check_task_new s WHERE s.task_state = #{taskState}
     </select>
@@ -31,7 +47,7 @@
             select * FROM spot_check_task_new s WHERE s.hm_id = #{id}
             AND s.task_state ='DOING'
     </select>
-    <select id="selectCheckUsers" resultMap="BaseResultMap">
+    <select id="selectCheckUsers" resultMap="BaseResultVoMap">
         select a.* from spot_check_task_new a
         left join hospitalmonitor b on b.id = a.hm_id
         where a.task_state ='DOING' LIMIT #{startIndex},#{pageSize}
