@@ -15,4 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class HisUserInfoServiceImpl extends ServiceImpl<HisUserInfoMapper, HisUserInfo> implements IHisUserInfoService {
 
+    @Override
+    public HisUserInfo selectByPercode(String token) {
+        return this.baseMapper.selectByPercode(token);
+    }
 }

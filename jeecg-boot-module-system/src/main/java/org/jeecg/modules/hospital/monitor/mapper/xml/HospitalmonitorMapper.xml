@@ -756,8 +756,10 @@
   </select>
   <select id="selectByHosId" parameterType="org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor" resultType="org.jeecg.modules.hospital.monitor.vo.HospitalMonitorVo">
         select a.name,a.sex,a.percode,a.phone,a.inscode,a.incode,a.indate, c.name as 'deptName', b.name as 'hisName',
-         a.diagnose,a.wardcode,a.outdate,a.moneycode,a.money from hospitalmonitor a
+         a.diagnose,a.wardcode,a.outdate,a.moneycode,a.money,d.image,a.image1,a.image2
+          ,a.image3,a.image4,a.image5,a.image6,a.image7,a.image8 from hospitalmonitor a
          left join hisinfo b on b.id = a.hisid
-          left join dictionary c on c.id = a.dept where a.id = #{id}
+          left join dictionary c on c.id = a.dept
+          left join perinfo d on d.percode = a.percode where a.id = #{id}
   </select>
 </mapper>

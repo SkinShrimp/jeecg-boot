@@ -14,6 +14,7 @@ import org.jeecg.modules.hospital.monitor.service.IHospitalmonitorService;
 import org.jeecg.modules.hospital.monitors.entity.MonitorList;
 import org.jeecg.modules.hospital.monitors.service.IMonitorListService;
 import org.jeecg.modules.hospital.monitors.vo.MonitorListVo;
+import org.jeecg.modules.hospital.perinfo.service.IPerInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,6 +39,8 @@ public class MonitorListController extends JeecgController<MonitorList, IMonitor
 	private IMonitorListService monitorListService;
 	@Autowired
 	private IHospitalmonitorService hospitalmonitorService;
+	@Autowired
+	private IPerInfoService perInfoService;
 	/**
 	 * 分页列表查询
 	 *

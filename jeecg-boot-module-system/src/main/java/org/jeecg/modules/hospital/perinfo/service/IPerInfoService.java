@@ -1,6 +1,8 @@
 package org.jeecg.modules.hospital.perinfo.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor;
+import org.jeecg.modules.hospital.monitors.entity.MonitorList;
 import org.jeecg.modules.hospital.perinfo.entity.PerInfo;
 
 /**
@@ -11,4 +13,7 @@ import org.jeecg.modules.hospital.perinfo.entity.PerInfo;
  */
 public interface IPerInfoService extends IService<PerInfo> {
 
+    void updatePerInfoByCode(Hospitalmonitor hospitalmonitor);
+
+    PerInfo selectOne(String percode);
 }

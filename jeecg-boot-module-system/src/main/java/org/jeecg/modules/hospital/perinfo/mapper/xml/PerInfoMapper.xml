@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.hospital.perinfo.mapper.PerInfoMapper">
-
+    <update id="updatePerInfoByCode">
+        update perinfo a set a.image = #{image} where a.percode = (select b.percode from hospitalmonitor b where b.id = #{id} limit 1)
+    </update>
+    <select id="selectByPerCode" resultType="org.jeecg.modules.hospital.perinfo.entity.PerInfo">
+        select * from perinfo where percode = #{percode} limit 1
+    </select>
 </mapper>

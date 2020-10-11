@@ -11,4 +11,5 @@ import org.jeecg.modules.hospital.hisuserinfo.entity.HisUserInfo;
  */
 public interface IHisUserInfoService extends IService<HisUserInfo> {
 
+    HisUserInfo selectByPercode(String token);
 }

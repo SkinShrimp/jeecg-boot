@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.base.controller.JeecgController;
@@ -64,13 +65,15 @@ public class PerInfoController extends JeecgController<PerInfo, IPerInfoService>
 		 }
 
 		 QueryWrapper<Hospitalmonitor> wrapper = new QueryWrapper();
-		 queryWrapper.eq("percode",percode);
+		 wrapper.eq("percode",percode);
 		 List<Hospitalmonitor> hospitalmonitors = hospitalmonitorService.list(wrapper);
 		 if(hospitalmonitors != null) {
 			 for (Hospitalmonitor hospitalmonitor : hospitalmonitors) {
-				 if(hospitalmonitor.getId()!= null &&hospitalmonitor.getImage1() != null && hospitalmonitor.getImage1().equals("dlgs.png")){
+				 if(hospitalmonitor.getId()!= null ){
 					 UpdateWrapper updateWrapper = new UpdateWrapper();
+					 if(hospitalmonitor.getImage1() != null && hospitalmonitor.getImage1().equals("dlgs.png"))
 					 updateWrapper.set("image1",null);
+					 if(dept!=null)
 					 updateWrapper.set("dept",dept);
 					 if(hospitalmonitor.getCheckstatus().equals("0")){
 						 updateWrapper.set("checkstatus", 1);
@@ -130,7 +133,14 @@ public class PerInfoController extends JeecgController<PerInfo, IPerInfoService>
 	@ApiOperation(value="住院人信息-编辑", notes="住院人信息-编辑")
 	@PutMapping(value = "/edit")
 	public Result<?> edit(@RequestBody PerInfo perInfo) {
-		perInfoService.updateById(perInfo);
+		UpdateWrapper<PerInfo> update = new UpdateWrapper<>();
+		if(StringUtils.isNotBlank(perInfo.getPercode())) {
+			update.eq("percode",perInfo.getPercode());
+			if(StringUtils.isNotBlank(perInfo.getImage())){
+				update.set("image",perInfo.getImage());
+			}
+			perInfoService.update(update);
+		}
 		return Result.ok("编辑成功!");
 	}
 	

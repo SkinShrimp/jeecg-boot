@@ -13,6 +13,8 @@ import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.modules.hospital.dictionary.entity.Dictionary;
 import org.jeecg.modules.hospital.dictionary.service.IDictionaryService;
 import org.jeecg.modules.hospital.dictionary.vo.DictionaryVo;
+import org.jeecg.modules.hospital.hisuserinfo.entity.HisUserInfo;
+import org.jeecg.modules.hospital.hisuserinfo.service.IHisUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,7 +38,8 @@ import java.util.List;
 public class DictionaryController extends JeecgController<Dictionary, IDictionaryService> {
 	@Autowired
 	private IDictionaryService dictionaryService;
-	
+	@Autowired
+	private IHisUserInfoService hisUserInfoService;
 	/**
 	 * 分页列表查询
 	 *
@@ -76,6 +79,16 @@ public class DictionaryController extends JeecgController<Dictionary, IDictionar
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
+		//校验token
+		if(token !=null) {
+			HisUserInfo hisUserInfo = hisUserInfoService.selectByPercode(token);
+			if(hisUserInfo==null){
+				return Result.error(-3,"登录失效");
+			}
+		}else{
+			return Result.error(-3,"登录失效");
+		}
+
 		HashMap hashMap = new HashMap();
 		hashMap.put("token",token);
 		hashMap.put("pageSize",pageSize);

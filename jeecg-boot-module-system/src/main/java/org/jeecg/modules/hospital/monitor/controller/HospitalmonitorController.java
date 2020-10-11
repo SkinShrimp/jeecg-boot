@@ -6,14 +6,19 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.modules.hospital.dictionary.service.IDictionaryService;
 import org.jeecg.modules.hospital.hisinfo.service.IHisinfoService;
+import org.jeecg.modules.hospital.hisuserinfo.entity.HisUserInfo;
+import org.jeecg.modules.hospital.hisuserinfo.service.IHisUserInfoService;
 import org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor;
 import org.jeecg.modules.hospital.monitor.service.IHospitalmonitorService;
 import org.jeecg.modules.hospital.monitor.vo.HospitalMonitorVo;
+import org.jeecg.modules.hospital.perinfo.entity.PerInfo;
+import org.jeecg.modules.hospital.perinfo.service.IPerInfoService;
 import org.jeecg.modules.hospital.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +47,10 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 	private IDictionaryService dictionaryService;
 	@Autowired
 	private IHisinfoService hisinfoService;
-	
+	@Autowired
+	private IHisUserInfoService hisUserInfoService;
+	@Autowired
+	private IPerInfoService perInfoService;
 	/**
 	 * 分页列表查询
 	 *
@@ -94,14 +102,23 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 	
 	/**
 	 *  编辑
-	 *
+	 * 人脸认证成功修改状态
 	 * @param hospitalmonitor
 	 * @return
 	 */
-	@AutoLog(value = "医院患者服务表-编辑")
 	@ApiOperation(value="医院患者服务表-编辑", notes="医院患者服务表-编辑")
-	@PutMapping(value = "/edit")
-	public Result<?> edit(@RequestBody Hospitalmonitor hospitalmonitor) {
+	@PostMapping(value = "/edit")
+	public Result<?> edit(Hospitalmonitor hospitalmonitor) {
+		//如果是0的话，标识为认证失败不做任何操作
+		if("0".equals(hospitalmonitor.getType())){
+			return null;
+		}
+		UpdateWrapper<Hospitalmonitor> update = new UpdateWrapper<>();
+		if(StringUtils.isNotBlank(hospitalmonitor.getId())){
+			update.eq("id",hospitalmonitor.getId());
+			update.set("monitorstatus",1);
+			update.set("lifestatus",1);
+		}
 		hospitalmonitorService.updateById(hospitalmonitor);
 		return Result.ok("编辑成功!");
 	}
@@ -189,7 +206,10 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 		queryWrapper.eq("status",1);
 		queryWrapper.eq("type","01");
 
+		PerInfo perInfo = perInfoService.selectOne(percode);
 		Hospitalmonitor one = hospitalmonitorService.getOne(queryWrapper);
+		if(perInfo!=null && perInfo.getImage()!=null && one !=null)
+		one.setImage(perInfo.getImage());
 		return Result.ok(one);
 	}
 
@@ -218,6 +238,9 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 		}
 		if(hospitalmonitor.getWardcode() != null || hospitalmonitor.getIncode()!= null || hospitalmonitor.getDiagnose() != null || hospitalmonitor.getDept() != null ||hospitalmonitor.getPhone() != null || hospitalmonitor.getInscode() != null)
 		hospitalmonitorService.update(updateWrapper);
+		if(hospitalmonitor != null && hospitalmonitor.getId()!=null && hospitalmonitor.getImage()!=null)
+		perInfoService.updatePerInfoByCode(hospitalmonitor);
+
 		return Result.ok("修改成功!");
 	}
 
@@ -226,6 +249,15 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 	@GetMapping(value = "/percode/nine")
 	public Result<?> getHospitalMonitorByPerCode(Hospitalmonitor hospitalmonitor, @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 												 @RequestParam(name="pageSize", defaultValue="10") Integer pageSize) {
+		//校验token
+		if(hospitalmonitor.getToken() !=null) {
+			HisUserInfo hisUserInfo = hisUserInfoService.selectByPercode(hospitalmonitor.getToken());
+			if(hisUserInfo==null){
+				return Result.error(-3,"登录失效");
+			}
+		}else{
+			return Result.error(-3,"登录失效");
+		}
 		Page<Hospitalmonitor> page = new Page<Hospitalmonitor>(pageNo, pageSize);
 		List<Hospitalmonitor> hospitalmonitors = hospitalmonitorService.selectHospitalMonitorByPerCode(hospitalmonitor, pageNo, pageSize);
 		Integer count = hospitalmonitorService.selectHospitalMonitorByPerCodeCount(hospitalmonitor);

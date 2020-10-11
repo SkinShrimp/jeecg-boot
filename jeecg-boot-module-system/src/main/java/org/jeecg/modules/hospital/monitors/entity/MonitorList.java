@@ -108,4 +108,7 @@ public class MonitorList implements Serializable {
 
     @TableField(exist = false)
     private String gpscheckstatus;
+
+    @TableField(exist = false)
+    private String image;
 }
