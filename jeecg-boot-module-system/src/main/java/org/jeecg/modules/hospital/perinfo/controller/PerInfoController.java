@@ -44,7 +44,7 @@ public class PerInfoController extends JeecgController<PerInfo, IPerInfoService>
 
 	 /**
 	  * 根据token将图片置空
-	  * @return
+	  * @return  住院登记打补丁
 	  */
 	 @AutoLog(value = "住院人信息-分页列表查询")
 	 @ApiOperation(value="住院人信息-分页列表查询", notes="住院人信息-分页列表查询")
@@ -77,6 +77,8 @@ public class PerInfoController extends JeecgController<PerInfo, IPerInfoService>
 					 updateWrapper.set("dept",dept);
 					 if(hospitalmonitor.getCheckstatus().equals("0")){
 						 updateWrapper.set("checkstatus", 1);
+						 updateWrapper.set("monitorstatus",1);
+						 updateWrapper.set("lifestatus",1);
 					 }
 					 updateWrapper.eq("id",hospitalmonitor.getId());
 					 hospitalmonitorService.update(updateWrapper);

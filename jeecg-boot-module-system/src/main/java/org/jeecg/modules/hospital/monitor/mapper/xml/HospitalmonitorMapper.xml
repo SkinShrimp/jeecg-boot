@@ -762,4 +762,9 @@
           left join dictionary c on c.id = a.dept
           left join perinfo d on d.percode = a.percode where a.id = #{id}
   </select>
+
+  <select id="selectByPerCode" resultType="java.util.Map">
+    select id from hospitalmonitor where status =1 and outstatus=1 and percode = #{percode}
+      ORDER BY modifydate desc LIMIT 1
+  </select>
 </mapper>

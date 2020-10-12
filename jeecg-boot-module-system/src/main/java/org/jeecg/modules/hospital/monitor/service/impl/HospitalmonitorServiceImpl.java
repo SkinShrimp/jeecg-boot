@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: 医院患者服务表
@@ -51,5 +52,10 @@ public class HospitalmonitorServiceImpl extends ServiceImpl<HospitalmonitorMappe
     @Override
     public HospitalMonitorVo queryByid(Hospitalmonitor hospitalmonitor) {
         return this.baseMapper.selectByHosId(hospitalmonitor);
+    }
+
+    @Override
+    public Map queryByPerCode(Hospitalmonitor hospitalmonitor) {
+        return this.baseMapper.selectByPerCode(hospitalmonitor);
     }
 }

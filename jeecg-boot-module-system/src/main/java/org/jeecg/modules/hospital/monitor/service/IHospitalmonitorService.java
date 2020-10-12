@@ -7,6 +7,7 @@ import org.jeecg.modules.hospital.monitor.vo.MonitorDictHisinfo;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: 医院患者服务表
@@ -27,4 +28,6 @@ public interface IHospitalmonitorService extends IService<Hospitalmonitor> {
     Integer selectHospitalMonitorByPerCodeCount(Hospitalmonitor hospitalmonitor);
 
     HospitalMonitorVo queryByid(Hospitalmonitor hospitalmonitor);
+
+    Map queryByPerCode(Hospitalmonitor hospitalmonitor);
 }

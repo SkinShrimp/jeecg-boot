@@ -38,23 +38,21 @@ public class Hospitalmonitor implements Serializable {
     @ApiModelProperty(value = "主键")
     private String id;
 	/**hisid*/
-	@Excel(name = "hisid", width = 15)
     @ApiModelProperty(value = "hisid")
     private Integer hisid;
 	/**type*/
-	@Excel(name = "type", width = 15)
     @ApiModelProperty(value = "type")
     private String type;
 	/**name*/
-	@Excel(name = "name", width = 15)
+	@Excel(name = "姓名", width = 15)
     @ApiModelProperty(value = "name")
     private String name;
 	/**sex*/
-	@Excel(name = "sex", width = 15)
+	@Excel(name = "性别", width = 15)
     @ApiModelProperty(value = "sex")
     private String sex;
 	/**percode*/
-	@Excel(name = "percode", width = 15)
+	@Excel(name = "身份证号", width = 15)
     @ApiModelProperty(value = "percode")
     private String percode;
 	/**inscode*/
@@ -192,7 +190,7 @@ public class Hospitalmonitor implements Serializable {
     @ApiModelProperty(value = "inid")
     private String inid;
 	/**outstatus*/
-	@Excel(name = "outstatus", width = 15)
+	@Excel(name = "住院类型", width = 15)
     @ApiModelProperty(value = "outstatus")
     private String outstatus;
 	/**status*/
@@ -262,5 +260,7 @@ public class Hospitalmonitor implements Serializable {
 
     @TableField(exist = false)
     private String image;
-
+    //医院名称
+    @TableField(exist = false)
+    private String hospitalName;
 }

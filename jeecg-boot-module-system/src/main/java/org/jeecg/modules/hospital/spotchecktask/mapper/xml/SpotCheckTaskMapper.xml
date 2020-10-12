@@ -50,19 +50,26 @@
     <select id="selectCheckUsers" resultMap="BaseResultVoMap">
         select a.* from spot_check_task_new a
         left join hospitalmonitor b on b.id = a.hm_id
-        where a.task_state ='DOING' LIMIT #{startIndex},#{pageSize}
+        left join hisinfo c on c.id = b.hisid
+        where a.task_state ='DOING'
+        and (b.type='01' OR b.type='05')
+        and EXISTS(select d.* from hisuserinfo d   where token =#{hospitalmonitor.token}  and d.dept=b.dept and d.hisid=c.id )
         <if test="hospitalmonitor.name != null and hospitalmonitor.name != ''">
             and b.name like concat('%',#{hospitalmonitor.name},'%')
         </if>
         <if test="hospitalmonitor.percode != null and hospitalmonitor.percode != ''">
             and b.percode like concat('%',#{hospitalmonitor.percode},'%')
         </if>
+        LIMIT #{startIndex},#{pageSize}
     </select>
 
     <select id="selectCheckUsersCount" resultType="java.lang.Integer">
         select count(1) from spot_check_task_new a
         left join hospitalmonitor b on b.id = a.hm_id
+        left join hisinfo c on c.id = b.hisid
         where a.task_state ='DOING'
+        and (b.type='01' OR b.type='05')
+        and EXISTS(select d.* from hisuserinfo d   where token =#{token}  and d.dept=b.dept and d.hisid=c.id )
         <if test="name != null and name != ''">
             and b.name like concat('%',#{name},'%')
         </if>

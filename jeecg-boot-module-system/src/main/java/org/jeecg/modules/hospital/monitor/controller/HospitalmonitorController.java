@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: 医院患者服务表
@@ -101,7 +102,7 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 	}
 	
 	/**
-	 *  编辑
+	 *  编辑  行为认证 打补丁
 	 * 人脸认证成功修改状态
 	 * @param hospitalmonitor
 	 * @return
@@ -111,15 +112,16 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 	public Result<?> edit(Hospitalmonitor hospitalmonitor) {
 		//如果是0的话，标识为认证失败不做任何操作
 		if("0".equals(hospitalmonitor.getType())){
-			return null;
+			return Result.error(0,"认证失败");
 		}
+		Map map = hospitalmonitorService.queryByPerCode(hospitalmonitor);
 		UpdateWrapper<Hospitalmonitor> update = new UpdateWrapper<>();
-		if(StringUtils.isNotBlank(hospitalmonitor.getId())){
-			update.eq("id",hospitalmonitor.getId());
+		if(map != null && map.get("id")!=null){
+			update.eq("id",map.get("id"));
 			update.set("monitorstatus",1);
 			update.set("lifestatus",1);
 		}
-		hospitalmonitorService.updateById(hospitalmonitor);
+		hospitalmonitorService.update(update);
 		return Result.ok("编辑成功!");
 	}
 
