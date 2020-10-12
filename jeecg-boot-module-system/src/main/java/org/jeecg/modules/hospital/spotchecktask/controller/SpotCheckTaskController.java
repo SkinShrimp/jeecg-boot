@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
-import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.modules.hospital.dictionary.entity.Dictionary;
 import org.jeecg.modules.hospital.dictionary.service.IDictionaryService;
 import org.jeecg.modules.hospital.hisinfo.entity.Hisinfo;
@@ -20,7 +19,6 @@ import org.jeecg.modules.hospital.utils.TaskState;
 import org.jeecg.modules.hospital.utils.TaskType;
 import org.jeecg.modules.task.TaskExecutionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
