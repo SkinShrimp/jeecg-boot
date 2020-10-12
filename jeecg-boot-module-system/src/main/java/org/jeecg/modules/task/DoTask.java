@@ -1,7 +1,9 @@
 package org.jeecg.modules.task;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask;
+import org.jeecg.modules.hospital.spotchecktask.service.ISpotCheckTaskService;
 import org.jeecg.modules.hospital.utils.TaskState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -17,7 +19,8 @@ public class DoTask implements Callable<SpotCheckTask> {
 	private ApplicationContext applicationContext;
 	@Autowired
 	private SpotCheckTask task;
-
+	@Autowired
+	private ISpotCheckTaskService spotCheckTaskService;
 	private DoTaskService doTaskService;
 
 	public DoTask(SpotCheckTask task) {
@@ -29,12 +32,23 @@ public class DoTask implements Callable<SpotCheckTask> {
 		this.task = task;
 		this.doTaskService = doTaskService;
 	}
-
+	public DoTask(SpotCheckTask task, DoTaskService doTaskService,ISpotCheckTaskService spotCheckTaskService) {
+		this.task = task;
+		this.doTaskService = doTaskService;
+		this.spotCheckTaskService=spotCheckTaskService;
+	}
 	@Override
 	public SpotCheckTask call() throws Exception {
 
 		if (TaskState.TODO == task.getTaskState()) {
 			task.setTaskState(TaskState.DOING);
+			//同步更新数据库中的状态
+			if(task.getId()!=null){
+				UpdateWrapper updateWrapper = new UpdateWrapper();
+				updateWrapper.eq("id",task.getId());
+				updateWrapper.set("task_state","DOING");
+				spotCheckTaskService.update(updateWrapper);
+			}
 			return task;
 		}
 

@@ -69,7 +69,7 @@
       #{hospoperator,jdbcType=VARCHAR}, #{inid,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
       #{operator,jdbcType=VARCHAR}, #{modifydate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
       #{checkstatus,jdbcType=VARCHAR}, #{checkdate,jdbcType=TIMESTAMP}, #{checkoperator,jdbcType=VARCHAR}, 
-      #{checkreason,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+      #{checkreason,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="org.jeecg.modules.hospital.monitors.entity.MonitorList">
     insert into monitorlist
@@ -171,9 +171,6 @@
       </if>
       <if test="checkreason != null">
         #{checkreason,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>

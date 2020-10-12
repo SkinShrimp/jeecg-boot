@@ -21,4 +21,6 @@ public interface SpotCheckTaskMapper extends BaseMapper<SpotCheckTask> {
     List<SpotCheckTask> selectCheckUsers(@Param("hospitalmonitor") Hospitalmonitor hospitalmonitor, @Param("startIndex") int startIndex, @Param("pageSize") Integer pageSize);
 
     Integer selectCheckUsersCount(Hospitalmonitor hospitalmonitor);
+
+    void updateTaskType(Hospitalmonitor hospitalmonitor);
 }

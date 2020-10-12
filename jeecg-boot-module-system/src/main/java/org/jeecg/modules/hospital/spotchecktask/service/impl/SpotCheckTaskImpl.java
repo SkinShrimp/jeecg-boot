@@ -43,6 +43,11 @@ public class SpotCheckTaskImpl  extends ServiceImpl<SpotCheckTaskMapper, SpotChe
         return this.baseMapper.selectCheckUsersCount(hospitalmonitor);
     }
 
+    @Override
+    public void updateTaskType(Hospitalmonitor hospitalmonitor) {
+     this.baseMapper.   updateTaskType(hospitalmonitor);
+    }
+
 
     private List<SpotCheckTask> getSpotCheckTasks(TaskState taskState) {
         return this.baseMapper.selectSpotCheckTasks(taskState);

@@ -77,4 +77,9 @@
             and b.percode like concat('%',#{percode},'%')
         </if>
     </select>
+    <update id="updateTaskType">
+        update spot_check_task_new a set a.task_state = 'AUTHENTICATE' where
+        a.hm_id=(select b.id from  hospitalmonitor b where b.percode=#{percode} and (b.type='01' OR b.type='05') limit 1 )
+        and a.task_state ='DOING'
+    </update>
 </mapper>

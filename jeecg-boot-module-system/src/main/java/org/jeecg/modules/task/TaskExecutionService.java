@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.*;
 @Slf4j
 @Service
@@ -34,6 +33,7 @@ public class TaskExecutionService {
 	private ISpotCheckTaskService spotCheckTaskService;
 	@Autowired
 	private DoTaskService doTaskService;
+
 
 	public TaskExecutionService() {
 		log.info("创建任务执行服务类");
@@ -75,14 +75,23 @@ public class TaskExecutionService {
 					long delay = 0L;
 					// 中断任务的恢复, 计算间隔加入任务队列
 					if (task.getTaskState() == TaskState.DOING) {
+						//程序需要执行的真正时间 = 数据更新时间 + 数据抽查时间  -当前时间
 						delay = (task.getStartTime() //
 								+ task.getUpdateTime().getTime()//
 								- Calendar.getInstance().getTimeInMillis()) / 1000L;
 					}
+
+					//定时抽查，先把状态为待抽查的改为抽查状态
+					if (task.getTaskState() == TaskState.TODO) {
+						//程序需要执行的真正时间 = 数据更新时间 + 数据抽查时间  -当前时间
+						delay = (task.getUpdateTime().getTime()//
+								- Calendar.getInstance().getTimeInMillis()) / 1000L;
+					}
+
 					if (delay < 0L) {
 						delay = 0L;
 					}
-					Future<SpotCheckTask> future = executorService.schedule(new DoTask(task, doTaskService), delay,
+					Future<SpotCheckTask> future = executorService.schedule(new DoTask(task, doTaskService,spotCheckTaskService), delay,
 							TimeUnit.SECONDS);
 					resultMap.put(task, future);
 					// resultQueue.put(future);
@@ -105,17 +114,18 @@ public class TaskExecutionService {
 		public void run() {
 			try {
 				while (true) {
-					Future<SpotCheckTask> future = null;
-					Set<SpotCheckTask> keySet = resultMap.keySet();
-					for (SpotCheckTask task : keySet) {
-						future = resultMap.get(task);
-						if (future.isDone() && (task.getTaskState() == TaskState.TODO //
-								|| task.getTaskState() == TaskState.DOING)) {
+					resultMap.forEach((key, value) -> {
+						if (value.isDone() && (key.getTaskState() == TaskState.TODO //
+								|| key.getTaskState() == TaskState.DOING)) {
 							// 需要再次加入等待队列
-							taskQueue.put(task);
-							resultMap.remove(task);
+							try {
+								taskQueue.put(key);
+								resultMap.remove(key);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 						}
-					}
+							});
 					Thread.sleep(1 * 60 * 1000L);
 				}
 

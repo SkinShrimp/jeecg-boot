@@ -16,7 +16,6 @@ import org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask;
 import org.jeecg.modules.hospital.spotchecktask.service.ISpotCheckTaskService;
 import org.jeecg.modules.hospital.spotchecktask.vo.SpotCheckTaskVo;
 import org.jeecg.modules.hospital.utils.TaskState;
-import org.jeecg.modules.hospital.utils.TaskType;
 import org.jeecg.modules.task.TaskExecutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +62,7 @@ public class SpotCheckTaskController{
                 UpdateWrapper<Hospitalmonitor> update = new UpdateWrapper<>();
                 update.set("extractstatus", hospitalMonitor.getExtractstatus());
                 update.eq("id",hospitalMonitor.getId());
-
+                //抽查前更新extractstatus 为1
                 this.hospitalmonitorService.update(update);
                 // 处理任务
                 if ("0".equals(hospitalMonitor.getExtractstatus())) {
@@ -81,10 +80,12 @@ public class SpotCheckTaskController{
                             || task.getTaskState() == TaskState.DONE) {
                         task = new SpotCheckTask();
                         task.setCreateTime(Calendar.getInstance().getTime());
-                        if(spotCheckTask.getDateStart() !=null){
+                        if("0".equals(spotCheckTask.getCheckStatus())){
                             task.setUpdateTime(spotCheckTask.getDateStart());
                             task.setStartTimeReal(spotCheckTask.getDateStart());
+                            task.setTaskState(TaskState.TODO);
                         }else {
+                            task.setTaskState(TaskState.DOING);
                             task.setUpdateTime(Calendar.getInstance().getTime());
                             task.setStartTimeReal(Calendar.getInstance().getTime());
                         }
@@ -92,9 +93,8 @@ public class SpotCheckTaskController{
                         task.setHmId (hospitalMonitor!=null?hospitalMonitor.getId():null);
                         task.setHospitalmonitor(hospitalMonitor);
 
-                        task.setTaskState(TaskState.DOING);
 
-                        task.setTaskType(TaskType.END_SPOTCHECK_HOSPITAL);
+//                        task.setTaskType(TaskType.END_SPOTCHECK_HOSPITAL);
                         try {
                             taskExecutionService.addTask(task);
                         } catch (InterruptedException e) {
@@ -143,5 +143,11 @@ public class SpotCheckTaskController{
 
             }
             return Result.ok(page);
+    }
+
+    @PostMapping(value = "/endSpotCheck")
+    public Result<?> endSpotCheckhospital(Hospitalmonitor hospitalmonitor) {
+        spotCheckTaskService.updateTaskType(hospitalmonitor);
+        return Result.ok("认证成功！");
     }
 }

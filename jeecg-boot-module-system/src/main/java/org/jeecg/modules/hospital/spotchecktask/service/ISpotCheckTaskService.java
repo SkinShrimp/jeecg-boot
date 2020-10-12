@@ -18,4 +18,6 @@ public interface ISpotCheckTaskService extends IService<SpotCheckTask> {
     List<SpotCheckTask> selectCheckUsers(Hospitalmonitor hospitalmonitor, Integer pageNo, Integer pageSize);
 
     Integer selectCheckUsersCount(Hospitalmonitor hospitalmonitor);
+
+    void updateTaskType(Hospitalmonitor hospitalmonitor);
 }
