@@ -21,7 +21,7 @@ import java.util.Date;
 
 
 @Data
-@TableName("spot_check_task_new")
+@TableName("spot_check_task")
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="SpotCheckTask对象", description="工作任务")
@@ -51,8 +51,6 @@ public class SpotCheckTask {
     private Date createTime;
 
     private Date updateTime;
-
-    private Date startTimeReal;
 
     @Excel(name = "taskType", width = 15)
     @ApiModelProperty(value = "taskType")

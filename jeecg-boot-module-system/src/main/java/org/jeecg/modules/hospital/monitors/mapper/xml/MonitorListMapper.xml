@@ -57,14 +57,14 @@
     delete from monitorlist
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="org.jeecg.modules.hospital.monitors.entity.MonitorList">
-    insert into monitorlist (id, hmid, `type`, 
+  <insert id="save" parameterType="org.jeecg.modules.hospital.monitors.entity.MonitorList">
+    insert into monitorlist (hmid, `type`,
       monitdate, hospdate, hospstatus, 
       hospoperator, inid, `status`, 
       `operator`, modifydate, remark, 
       checkstatus, checkdate, checkoperator, 
       checkreason)
-    values (#{id,jdbcType=INTEGER}, #{hmid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
+    values ( #{hmid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR},
       #{monitdate,jdbcType=TIMESTAMP}, #{hospdate,jdbcType=TIMESTAMP}, #{hospstatus,jdbcType=VARCHAR}, 
       #{hospoperator,jdbcType=VARCHAR}, #{inid,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, 
       #{operator,jdbcType=VARCHAR}, #{modifydate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 

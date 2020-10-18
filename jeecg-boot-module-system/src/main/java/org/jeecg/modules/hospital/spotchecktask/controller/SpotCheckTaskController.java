@@ -82,12 +82,10 @@ public class SpotCheckTaskController{
                         task.setCreateTime(Calendar.getInstance().getTime());
                         if("0".equals(spotCheckTask.getCheckStatus())){
                             task.setUpdateTime(spotCheckTask.getDateStart());
-                            task.setStartTimeReal(spotCheckTask.getDateStart());
                             task.setTaskState(TaskState.TODO);
                         }else {
                             task.setTaskState(TaskState.DOING);
                             task.setUpdateTime(Calendar.getInstance().getTime());
-                            task.setStartTimeReal(Calendar.getInstance().getTime());
                         }
                         task.setStartTime(spotCheckTask.getDateInterval()*60*1000L);
                         task.setHmId (hospitalMonitor!=null?hospitalMonitor.getId():null);
@@ -102,6 +100,7 @@ public class SpotCheckTaskController{
                         }
 
                         spotCheckTaskService.saveOrUpdate(task);
+
                     }
 
                 }

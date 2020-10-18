@@ -21,4 +21,6 @@ public interface IMonitorListService extends IService<MonitorList> {
     Integer getUndoMonitorListCount(String id);
 
     void updateMonitorById(MonitorList monitorList);
+
+    void insert(MonitorList monitorList);
 }

@@ -33,22 +33,22 @@
         </association>
     </resultMap>
     <select id="selectSpotCheckTasks" resultMap="BaseResultMap" parameterType="org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask">
-       select s.* FROM spot_check_task_new s WHERE s.task_state = #{taskState}
+       select s.* FROM spot_check_task s WHERE s.task_state = #{taskState}
     </select>
     <select id="selectAllById" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select * from spot_check_task_new where id=#{id}
+        select * from spot_check_task where id=#{id}
     </select>
     <select id="selectSpotCheckTasksBySpotCheckTask" resultMap="BaseResultMap" parameterType="org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask">
-          select s.* FROM spot_check_task_new s
+          select s.* FROM spot_check_task s
           left join hospitalMonitor m on s.hm_id=m.id
           WHERE s.task_state = #{taskState} and m.hisid=#{hisid} and m.dept=#{deptId}
     </select>
     <select id="getSpotCheckTaskByHmId" resultMap="BaseResultMap" parameterType="java.lang.String" >
-            select * FROM spot_check_task_new s WHERE s.hm_id = #{id}
+            select * FROM spot_check_task s WHERE s.hm_id = #{id}
             AND s.task_state ='DOING'
     </select>
     <select id="selectCheckUsers" resultMap="BaseResultVoMap">
-        select a.* from spot_check_task_new a
+        select a.* from spot_check_task a
         left join hospitalmonitor b on b.id = a.hm_id
         left join hisinfo c on c.id = b.hisid
         where a.task_state ='DOING'
@@ -64,7 +64,7 @@
     </select>
 
     <select id="selectCheckUsersCount" resultType="java.lang.Integer">
-        select count(1) from spot_check_task_new a
+        select count(1) from spot_check_task a
         left join hospitalmonitor b on b.id = a.hm_id
         left join hisinfo c on c.id = b.hisid
         where a.task_state ='DOING'
@@ -78,7 +78,7 @@
         </if>
     </select>
     <update id="updateTaskType">
-        update spot_check_task_new a set a.task_state = 'AUTHENTICATE' where
+        update spot_check_task a set a.task_state = 'AUTHENTICATE' where
         a.hm_id=(select b.id from  hospitalmonitor b where b.percode=#{percode} and (b.type='01' OR b.type='05') limit 1 )
         and a.task_state ='DOING'
     </update>

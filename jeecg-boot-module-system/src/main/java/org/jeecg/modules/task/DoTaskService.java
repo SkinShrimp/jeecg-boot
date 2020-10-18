@@ -9,7 +9,6 @@ import org.jeecg.modules.hospital.monitors.service.IMonitorListService;
 import org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask;
 import org.jeecg.modules.hospital.spotchecktask.service.ISpotCheckTaskService;
 import org.jeecg.modules.hospital.utils.TaskState;
-import org.jeecg.modules.hospital.utils.TaskType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +21,6 @@ public class DoTaskService  {
 
 	@Autowired
 	private ISpotCheckTaskService spotCheckTaskService;
-
 	@Autowired
 	private IMonitorListService monitorListService;
 	@Autowired
@@ -35,9 +33,12 @@ public class DoTaskService  {
 	 */
 	public SpotCheckTask processTask(SpotCheckTask task) throws Exception {
 		try {
-			// 处理定时任务
-			if (task.getTaskType() == TaskType.END_SPOTCHECK_HOSPITAL) {
-				return endSpotCheckhospital(task);
+			//数据库中的状态已被修改就不走新增流程
+			if(task.getTaskState()!=null&&task.getId()!=null) {
+				task = spotCheckTaskService.getById(task.getId());
+			}
+			if(task.getTaskState()!=null &&!TaskState.CANCELLED.equals(task.getTaskState())&&!TaskState.DONE.equals(task.getTaskState())){
+				endSpotCheckhospital(task);
 			}
 
 		} catch (Exception e) {
@@ -72,11 +73,11 @@ public class DoTaskService  {
 		if(hospitalmonitor==null){
 			return;
 		}
-		if ("0".equals(hospitalmonitor.getExtractstatus()) //
-				|| "2".equals(hospitalmonitor.getOutstatus())) {
-			// 非抽查或者已出院
-			return;
-		}
+//		if ("0".equals(hospitalmonitor.getExtractstatus()) //
+//				|| "2".equals(hospitalmonitor.getOutstatus())) {
+//			// 非抽查或者已出院
+//			return;
+//		}
 		// hospnum表示未上次次数
 		Integer undo = monitorListService.getUndoMonitorListCount(hospitalmonitor.getId());
 		hospitalmonitor.setExtractstatus("0");
@@ -88,10 +89,10 @@ public class DoTaskService  {
 		hospitalmonitorService.update(updateWrapper);
 
 		// MonitorList是否存在在院抽查情况
-		boolean existed = hospitalmonitorService.CheckHmIdWithLicit(hospitalmonitor.getId(), "04");
-		if (existed) {
-			return;
-		}
+//		boolean existed = hospitalmonitorService.CheckHmIdWithLicit(hospitalmonitor.getId(), "04");
+//		if (existed) {
+//			return;
+//		}
 
 		// 半夜11点半执行，总结一下当天上传情况
 		MonitorList monitorList = new MonitorList();
@@ -105,11 +106,18 @@ public class DoTaskService  {
 		monitorList.setCheckstatus("0");
 		monitorList.setOperator("System");
 		monitorList.setModifydate(Calendar.getInstance().getTime()); //实际写入时间
-		monitorListService.save(monitorList);
+		monitorListService.insert(monitorList);
 	}
 
 
 	private SpotCheckTask finishTask(SpotCheckTask task) {
+		//已经认证完成的抽查直接返回 不做修改
+		if(task.getTaskState()!=null&&task.getId()!=null) {
+			task = spotCheckTaskService.getById(task.getId());
+		}
+		if(task.getTaskState()!=null && TaskState.AUTHENTICATE.equals(task.getTaskState())&& TaskState.CANCELLED.equals(task.getTaskState())) {
+			return task;
+		}
 		task.setTaskState(TaskState.DONE);
 		spotCheckTaskService.saveOrUpdate(task);
 		return task;

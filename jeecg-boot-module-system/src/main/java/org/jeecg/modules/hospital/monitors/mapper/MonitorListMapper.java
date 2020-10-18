@@ -21,4 +21,6 @@ public interface MonitorListMapper extends BaseMapper<MonitorList> {
     Integer selectUndoMonitorListCount(String id);
 
     void updateMonitorById(MonitorList monitorList);
+
+    void save(MonitorList monitorList);
 }

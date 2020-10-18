@@ -38,4 +38,9 @@ public class MonitorListServiceImpl extends ServiceImpl<MonitorListMapper, Monit
     public void updateMonitorById(MonitorList monitorList) {
         this.baseMapper.updateMonitorById(monitorList);
     }
+
+    @Override
+    public void insert(MonitorList monitorList) {
+        this.baseMapper.save(monitorList);
+    }
 }

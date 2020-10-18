@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
 import org.jeecg.common.system.base.controller.JeecgController;
@@ -120,6 +119,8 @@ public class HospitalmonitorController extends JeecgController<Hospitalmonitor, 
 			update.eq("id",map.get("id"));
 			update.set("monitorstatus",1);
 			update.set("lifestatus",1);
+		}else{
+			Result.error(-2,"已出院");
 		}
 		hospitalmonitorService.update(update);
 		return Result.ok("编辑成功!");
