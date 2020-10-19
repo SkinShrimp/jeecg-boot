@@ -91,12 +91,12 @@ public class TaskExecutionService {
 					if (delay < 0L) {
 						delay = 0L;
 					}
-					Future<SpotCheckTask> future = executorService.schedule(new DoTask(task, doTaskService), delay,
+					Future<SpotCheckTask> future = executorService.schedule(new DoTask(task, doTaskService ,spotCheckTaskService,new TaskExecutionService()), delay,
 							TimeUnit.SECONDS);
-					SpotCheckTask byId = spotCheckTaskService.getById(task.getId());
-					if(byId!=null && byId.getTaskState()!=null&&byId.getTaskState().equals(TaskState.AUTHENTICATE)) {
-						resultMap.put(task, future);
-					}
+//					SpotCheckTask byId = spotCheckTaskService.getById(task.getId());
+//					if(byId!=null && byId.getTaskState()!=null&&byId.getTaskState().equals(TaskState.DOING)) {
+//						taskQueue.put(byId);
+//					}
 					// resultQueue.put(future);
 					// 获取下一个任务
 					task = taskQueue.take();
@@ -122,7 +122,9 @@ public class TaskExecutionService {
 								|| key.getTaskState() == TaskState.DOING)) {
 							// 需要再次加入等待队列
 							try {
-								if(key.getTaskState()!=null&&key.getTaskState().equals(TaskState.AUTHENTICATE)){
+								SpotCheckTask byId = spotCheckTaskService.getById(key.getId());
+								key=byId;
+								if(key.getTaskState()!=null&&(key.getTaskState().equals(TaskState.CANCELLED)||key.getTaskState().equals(TaskState.DOING))){
 									resultMap.remove(key);
 								}else  {
 									taskQueue.put(key);

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.Date;
 
 @Slf4j
 @Service
@@ -33,13 +34,21 @@ public class DoTaskService  {
 	 */
 	public SpotCheckTask processTask(SpotCheckTask task) throws Exception {
 		try {
-			//数据库中的状态已被修改就不走新增流程
-			if(task.getTaskState()!=null&&task.getId()!=null) {
-				task = spotCheckTaskService.getById(task.getId());
+
+			//*****************************************打补丁 当app端认证成功后，修改抽查表就好了不做后面的逻辑
+			if(task!=null && task.getHmId()!=null){
+				Hospitalmonitor byId = hospitalmonitorService.getById(task.getHmId());
+				if(byId!=null&&byId.getExtractstatus()!=null&&"0".equals(byId.getExtractstatus())){
+					UpdateWrapper update = new UpdateWrapper();
+					update.eq("hm_id",byId.getId());
+					update.eq("task_state",TaskState.DOING);
+					update.set("task_state",TaskState.DONE);
+					spotCheckTaskService.update(update);
+                    return null;
+				}
+
 			}
-			if(task.getTaskState()!=null &&!TaskState.CANCELLED.equals(task.getTaskState())&&!TaskState.DONE.equals(task.getTaskState())){
-				endSpotCheckhospital(task);
-			}
+			endSpotCheckhospital(task);
 
 		} catch (Exception e) {
 			log.error(e.toString());
@@ -115,10 +124,11 @@ public class DoTaskService  {
 		if(task.getTaskState()!=null&&task.getId()!=null) {
 			task = spotCheckTaskService.getById(task.getId());
 		}
-		if(task.getTaskState()!=null && TaskState.AUTHENTICATE.equals(task.getTaskState())&& TaskState.CANCELLED.equals(task.getTaskState())) {
+		if(task.getTaskState()!=null && TaskState.CANCELLED.equals(task.getTaskState())&& TaskState.CANCELLED.equals(task.getTaskState())) {
 			return task;
 		}
 		task.setTaskState(TaskState.DONE);
+		task.setUpdateTime(new Date());
 		spotCheckTaskService.saveOrUpdate(task);
 		return task;
 	}

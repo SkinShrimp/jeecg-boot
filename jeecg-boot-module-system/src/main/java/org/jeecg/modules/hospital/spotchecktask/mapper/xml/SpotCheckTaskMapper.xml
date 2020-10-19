@@ -52,7 +52,7 @@
         left join hospitalmonitor b on b.id = a.hm_id
         left join hisinfo c on c.id = b.hisid
         where a.task_state ='DOING'
-        and (b.type='01' OR b.type='05')
+        and (b.type='01' OR b.type='05') and b.extractstatus=1
         and EXISTS(select d.* from hisuserinfo d   where token =#{hospitalmonitor.token}  and d.dept=b.dept and d.hisid=c.id )
         <if test="hospitalmonitor.name != null and hospitalmonitor.name != ''">
             and b.name like concat('%',#{hospitalmonitor.name},'%')
@@ -78,7 +78,7 @@
         </if>
     </select>
     <update id="updateTaskType">
-        update spot_check_task a set a.task_state = 'AUTHENTICATE' where
+        update spot_check_task a set a.task_state = 'CANCELLED' where
         a.hm_id=(select b.id from  hospitalmonitor b where b.percode=#{percode} and (b.type='01' OR b.type='05') limit 1 )
         and a.task_state ='DOING'
     </update>

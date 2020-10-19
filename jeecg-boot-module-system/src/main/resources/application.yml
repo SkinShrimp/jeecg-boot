@@ -1,11 +1,10 @@
 spring:
   profiles:
-    active: dev
+    active: test
 swagger:
   production: false
   basic:
     enable: false
-    username: jeecg
     password: jeecg1314
 # 第三方登录
 justauth:
