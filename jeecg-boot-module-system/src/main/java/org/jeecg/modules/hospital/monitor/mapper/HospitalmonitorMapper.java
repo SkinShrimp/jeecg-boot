@@ -29,4 +29,6 @@ public interface HospitalmonitorMapper extends BaseMapper<Hospitalmonitor> {
     HospitalMonitorVo selectByHosId(Hospitalmonitor hospitalmonitor);
 
     Map selectByPerCode(Hospitalmonitor hospitalmonitor);
+
+    Integer selectNoPassCount();
 }

@@ -6,28 +6,37 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.modules.hospital.dictionary.entity.Dictionary;
 import org.jeecg.modules.hospital.dictionary.service.IDictionaryService;
 import org.jeecg.modules.hospital.hisinfo.entity.Hisinfo;
 import org.jeecg.modules.hospital.hisinfo.service.IHisinfoService;
 import org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor;
 import org.jeecg.modules.hospital.monitor.service.IHospitalmonitorService;
+import org.jeecg.modules.hospital.monitors.service.IMonitorListService;
 import org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask;
 import org.jeecg.modules.hospital.spotchecktask.service.ISpotCheckTaskService;
 import org.jeecg.modules.hospital.spotchecktask.vo.SpotCheckTaskVo;
 import org.jeecg.modules.hospital.utils.TaskState;
+import org.jeecg.modules.hospital.utils.Tools;
 import org.jeecg.modules.task.TaskExecutionService;
+import org.jeecgframework.poi.excel.def.NormalExcelConstants;
+import org.jeecgframework.poi.excel.entity.ExportParams;
+import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 @Api(tags="工作任务")
 @RestController
 @RequestMapping("/hospital/spotCheckTask")
 @Slf4j
-public class SpotCheckTaskController{
+public class SpotCheckTaskController extends JeecgController<SpotCheckTask, ISpotCheckTaskService> {
     @Autowired
     private ISpotCheckTaskService spotCheckTaskService;
     @Autowired
@@ -38,6 +47,60 @@ public class SpotCheckTaskController{
     private IHisinfoService hisinfoService;
     @Autowired
     private TaskExecutionService taskExecutionService;
+    @Autowired
+    private IMonitorListService monitorListService;
+
+
+
+    @GetMapping(value = "/list")
+    public Result<?> queryPageList(Hospitalmonitor hospitalmonitor,
+                                   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
+                                   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
+                                   HttpServletRequest req) {
+        Page page = new Page();
+        HashMap parameterMap = Tools.parameterToMap(req);
+        Integer count = spotCheckTaskService.spotCheckTaskListsCount(parameterMap);
+        List<SpotCheckTaskVo> pageList = spotCheckTaskService.spotCheckTaskLists(parameterMap);
+        Integer num = hospitalmonitorService.selectNoPassCount();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("type","04");
+        SpotCheckTaskVo spotCheckTaskVo=null;
+        for (int i = 0; i < pageList.size(); i++) {
+            spotCheckTaskVo =pageList.get(i);
+            if(spotCheckTaskVo!=null && spotCheckTaskVo.getId()!=null){
+                queryWrapper.eq("hmid",spotCheckTaskVo.getId());
+                Integer count1 = monitorListService.count(queryWrapper);
+                if(count1!=null) {
+                    spotCheckTaskVo.setCheckNum(count1);
+                }else {
+                    spotCheckTaskVo.setCheckNum(0);
+                }
+                queryWrapper.eq("hospstatus",0);
+                Integer count2 = monitorListService.count(queryWrapper);
+                if(count2!=null) {
+                    spotCheckTaskVo.setNotUploadedNum(count2);
+                }else {
+                    spotCheckTaskVo.setCheckNum(0);
+                }
+                spotCheckTaskVo.setNotPassNum(num);
+                pageList.set(i,spotCheckTaskVo);
+            }
+        }
+        page.setSize(pageSize);
+        page.setCurrent(pageNo);
+        page.setTotal(count);
+        if(count != null && count!=0) {
+            page.setPages(count%pageSize==0?count%pageSize:count%pageSize+1);
+        }else{
+            page.setPages(1L);
+
+        }
+        page.setRecords(pageList);
+
+
+        return Result.ok(page);
+    }
+
 
     /**
      * 接收到在院抽查通知 25
@@ -148,5 +211,44 @@ public class SpotCheckTaskController{
     public Result<?> endSpotCheckhospital(Hospitalmonitor hospitalmonitor) {
         spotCheckTaskService.updateTaskType(hospitalmonitor);
         return Result.ok("认证成功！");
+    }
+    @RequestMapping(value = "/exportXls")
+    public ModelAndView exportXls(HttpServletRequest request, Hospitalmonitor hospitalmonitor) {
+
+        List<SpotCheckTaskVo> pageList = spotCheckTaskService.spotCheckTaskListsAll(hospitalmonitor);
+        Integer num = hospitalmonitorService.selectNoPassCount();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("type","04");
+        SpotCheckTaskVo spotCheckTaskVo=null;
+        for (int i = 0; i < pageList.size(); i++) {
+            spotCheckTaskVo =pageList.get(i);
+            if(spotCheckTaskVo!=null && spotCheckTaskVo.getId()!=null){
+                queryWrapper.eq("hmid",spotCheckTaskVo.getId());
+                Integer count1 = monitorListService.count(queryWrapper);
+                if(count1!=null) {
+                    spotCheckTaskVo.setCheckNum(count1);
+                }else {
+                    spotCheckTaskVo.setCheckNum(0);
+                }
+                queryWrapper.eq("hospstatus",0);
+                Integer count2 = monitorListService.count(queryWrapper);
+                if(count2!=null) {
+                    spotCheckTaskVo.setNotUploadedNum(count2);
+                }else {
+                    spotCheckTaskVo.setCheckNum(0);
+                }
+                spotCheckTaskVo.setNotPassNum(num);
+                pageList.set(i,spotCheckTaskVo);
+            }
+        }
+        // Step.3 AutoPoi 导出Excel
+        ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
+        mv.addObject(NormalExcelConstants.FILE_NAME, "抽查表"); //此处设置的filename无效 ,前端会重更新设置一下
+        mv.addObject(NormalExcelConstants.CLASS, SpotCheckTaskVo.class);
+        mv.addObject(NormalExcelConstants.PARAMS, new ExportParams("抽查表", "导出人:管理员"));
+        mv.addObject(NormalExcelConstants.DATA_LIST, pageList);
+        return mv;
+
+
     }
 }

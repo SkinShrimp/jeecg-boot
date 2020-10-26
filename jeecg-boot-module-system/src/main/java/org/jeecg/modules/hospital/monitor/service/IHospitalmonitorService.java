@@ -30,4 +30,7 @@ public interface IHospitalmonitorService extends IService<Hospitalmonitor> {
     HospitalMonitorVo queryByid(Hospitalmonitor hospitalmonitor);
 
     Map queryByPerCode(Hospitalmonitor hospitalmonitor);
+
+    Integer selectNoPassCount();
+
 }

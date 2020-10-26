@@ -82,4 +82,72 @@
         a.hm_id=(select b.id from  hospitalmonitor b where b.percode=#{percode} and (b.type='01' OR b.type='05') limit 1 )
         and a.task_state ='DOING'
     </update>
+    <select id="selectSpotCheckTaskListsCount" resultType="java.lang.Integer">
+        select count(1) from spot_check_task a left join  hospitalmonitor b on b.id=a.hm_id
+        left join hisinfo c on b.hisid=c.id left join dictionary d on d.id = b.dept
+        <where>
+            exists(select e.* from hospitalmonitor e where e.id=a.hm_id)
+            <if test="hospitalName != null and hospitalName !=''">
+                and c.name like concat('%',#{hospitalName},'%')
+            </if>
+            <if test="outstatus != null and outstatus !=''">
+                and b.outstatus =#{outstatus}
+            </if>
+            <if test="dept != null ">
+                and b.dept = #{dept}
+            </if>
+            <if test="extractstatus != null ">
+                and b.extractstatus = #{extractstatus}
+            </if>
+        </where>
+    </select>
+    <select id="selectSpotCheckTaskLists" resultType="org.jeecg.modules.hospital.spotchecktask.vo.SpotCheckTaskVo">
+        select b.id,c.name hospitalName,d.name dictName,b.outstatus,b.extractstatus,b.name,b.sex,b.percode,b.indate from spot_check_task a left join  hospitalmonitor b on b.id=a.hm_id
+        left join hisinfo c on b.hisid=c.id left join dictionary d on d.id = b.dept
+        <where>
+        exists(select e.* from hospitalmonitor e where e.id=a.hm_id)
+            <if test="hospitalName != null and hospitalName !=''">
+                and c.name like concat('%',#{hospitalName},'%')
+            </if>
+            <if test="outstatus != null and outstatus !=''">
+                and b.outstatus =#{outstatus}
+            </if>
+            <if test="dept != null ">
+                and b.dept = #{dept}
+            </if>
+            <if test="extractstatus != null ">
+                and b.extractstatus = #{extractstatus}
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="column!=null">
+                ${column} ${order}
+            </when>
+            <otherwise>
+                b.extractstatus DESC
+            </otherwise>
+        </choose>
+        LIMIT ${startIndex}, ${pageSize}
+    </select>
+
+    <select id="selectSpotCheckTaskListsAll" resultType="org.jeecg.modules.hospital.spotchecktask.vo.SpotCheckTaskVo">
+        select b.id,c.name hospitalName,d.name dictName,b.outstatus,b.extractstatus,b.name,b.sex,b.percode,b.indate from spot_check_task a left join  hospitalmonitor b on b.id=a.hm_id
+        left join hisinfo c on b.hisid=c.id left join dictionary d on d.id = b.dept
+        <where>
+            exists(select e.* from hospitalmonitor e where e.id=a.hm_id)
+            <if test="hospitalName != null and hospitalName !=''">
+                and c.name like concat('%',#{hospitalName},'%')
+            </if>
+            <if test="outstatus != null and outstatus !=''">
+                and b.outstatus =#{outstatus}
+            </if>
+            <if test="dept != null ">
+                and b.dept = #{dept}
+            </if>
+            <if test="extractstatus != null ">
+                and b.extractstatus = #{extractstatus}
+            </if>
+        </where>
+    </select>
 </mapper>

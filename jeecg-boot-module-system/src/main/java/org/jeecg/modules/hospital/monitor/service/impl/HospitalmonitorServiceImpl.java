@@ -58,4 +58,9 @@ public class HospitalmonitorServiceImpl extends ServiceImpl<HospitalmonitorMappe
     public Map queryByPerCode(Hospitalmonitor hospitalmonitor) {
         return this.baseMapper.selectByPerCode(hospitalmonitor);
     }
+
+    @Override
+    public Integer selectNoPassCount() {
+        return this.baseMapper.selectNoPassCount();
+    }
 }

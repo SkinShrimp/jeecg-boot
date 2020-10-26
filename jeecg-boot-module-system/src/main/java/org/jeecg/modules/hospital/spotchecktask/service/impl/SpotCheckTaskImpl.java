@@ -9,6 +9,7 @@ import org.jeecg.modules.hospital.spotchecktask.vo.SpotCheckTaskVo;
 import org.jeecg.modules.hospital.utils.TaskState;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -46,6 +47,21 @@ public class SpotCheckTaskImpl  extends ServiceImpl<SpotCheckTaskMapper, SpotChe
     @Override
     public void updateTaskType(Hospitalmonitor hospitalmonitor) {
      this.baseMapper.   updateTaskType(hospitalmonitor);
+    }
+
+    @Override
+    public Integer spotCheckTaskListsCount(HashMap parameterMap) {
+        return this.baseMapper.selectSpotCheckTaskListsCount(parameterMap);
+    }
+
+    @Override
+    public List<SpotCheckTaskVo>  spotCheckTaskLists(HashMap parameterMap) {
+        return this.baseMapper.selectSpotCheckTaskLists(parameterMap);
+    }
+
+    @Override
+    public List<SpotCheckTaskVo> spotCheckTaskListsAll(Hospitalmonitor hospitalmonitor) {
+        return this.baseMapper.selectSpotCheckTaskListsAll(hospitalmonitor);
     }
 
 

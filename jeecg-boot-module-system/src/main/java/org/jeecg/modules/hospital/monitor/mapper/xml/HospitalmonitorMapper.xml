@@ -55,15 +55,15 @@
     <result column="areaid" jdbcType="INTEGER" property="areaid" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, hisid, `type`, `name`, sex, percode, inscode, phone, indate, dept, diagnose, 
-    incode, wardcode, outdate, moneycode, money, image1, image2, image3, image4, image5, 
-    image6, image7, image8, hospdate, hospoperator, gpsstatus, longitude, latitude, monitorstatus, 
-    enddate, hospnum, checkstatus, checkdate, checkoperator, checkreason, inid, outstatus, 
-    `status`, `operator`, modifydate, remark, extractstatus, gpscheckstatus, lifestatus, 
+    id, hisid, `type`, `name`, sex, percode, inscode, phone, indate, dept, diagnose,
+    incode, wardcode, outdate, moneycode, money, image1, image2, image3, image4, image5,
+    image6, image7, image8, hospdate, hospoperator, gpsstatus, longitude, latitude, monitorstatus,
+    enddate, hospnum, checkstatus, checkdate, checkoperator, checkreason, inid, outstatus,
+    `status`, `operator`, modifydate, remark, extractstatus, gpscheckstatus, lifestatus,
     supcode1, supcode2, supcode3, supcode4, pertype, areaid
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from hospitalmonitor
     where id = #{id,jdbcType=INTEGER}
@@ -73,39 +73,39 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor">
-    insert into hospitalmonitor (id, hisid, `type`, 
-      `name`, sex, percode, 
-      inscode, phone, indate, 
-      dept, diagnose, incode, 
-      wardcode, outdate, moneycode, 
-      money, image1, image2, 
-      image3, image4, image5, 
-      image6, image7, image8, 
-      hospdate, hospoperator, gpsstatus, 
-      longitude, latitude, monitorstatus, 
-      enddate, hospnum, checkstatus, 
-      checkdate, checkoperator, checkreason, 
-      inid, outstatus, `status`, 
-      `operator`, modifydate, remark, 
-      extractstatus, gpscheckstatus, lifestatus, 
-      supcode1, supcode2, supcode3, 
+    insert into hospitalmonitor (id, hisid, `type`,
+      `name`, sex, percode,
+      inscode, phone, indate,
+      dept, diagnose, incode,
+      wardcode, outdate, moneycode,
+      money, image1, image2,
+      image3, image4, image5,
+      image6, image7, image8,
+      hospdate, hospoperator, gpsstatus,
+      longitude, latitude, monitorstatus,
+      enddate, hospnum, checkstatus,
+      checkdate, checkoperator, checkreason,
+      inid, outstatus, `status`,
+      `operator`, modifydate, remark,
+      extractstatus, gpscheckstatus, lifestatus,
+      supcode1, supcode2, supcode3,
       supcode4, pertype, areaid
-    values (#{id,jdbcType=INTEGER}, #{hisid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{percode,jdbcType=VARCHAR}, 
-      #{inscode,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{indate,jdbcType=TIMESTAMP}, 
-      #{dept,jdbcType=INTEGER}, #{diagnose,jdbcType=VARCHAR}, #{incode,jdbcType=VARCHAR}, 
-      #{wardcode,jdbcType=VARCHAR}, #{outdate,jdbcType=TIMESTAMP}, #{moneycode,jdbcType=VARCHAR}, 
-      #{money,jdbcType=DECIMAL}, #{image1,jdbcType=VARCHAR}, #{image2,jdbcType=VARCHAR}, 
-      #{image3,jdbcType=VARCHAR}, #{image4,jdbcType=VARCHAR}, #{image5,jdbcType=VARCHAR}, 
-      #{image6,jdbcType=VARCHAR}, #{image7,jdbcType=VARCHAR}, #{image8,jdbcType=VARCHAR}, 
-      #{hospdate,jdbcType=TIMESTAMP}, #{hospoperator,jdbcType=VARCHAR}, #{gpsstatus,jdbcType=VARCHAR}, 
-      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{monitorstatus,jdbcType=VARCHAR}, 
-      #{enddate,jdbcType=TIMESTAMP}, #{hospnum,jdbcType=INTEGER}, #{checkstatus,jdbcType=VARCHAR}, 
-      #{checkdate,jdbcType=TIMESTAMP}, #{checkoperator,jdbcType=VARCHAR}, #{checkreason,jdbcType=VARCHAR}, 
-      #{inid,jdbcType=INTEGER}, #{outstatus,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
-      #{operator,jdbcType=VARCHAR}, #{modifydate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
-      #{extractstatus,jdbcType=VARCHAR}, #{gpscheckstatus,jdbcType=VARCHAR}, #{lifestatus,jdbcType=VARCHAR}, 
-      #{supcode1,jdbcType=VARCHAR}, #{supcode2,jdbcType=VARCHAR}, #{supcode3,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{hisid,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR},
+      #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{percode,jdbcType=VARCHAR},
+      #{inscode,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{indate,jdbcType=TIMESTAMP},
+      #{dept,jdbcType=INTEGER}, #{diagnose,jdbcType=VARCHAR}, #{incode,jdbcType=VARCHAR},
+      #{wardcode,jdbcType=VARCHAR}, #{outdate,jdbcType=TIMESTAMP}, #{moneycode,jdbcType=VARCHAR},
+      #{money,jdbcType=DECIMAL}, #{image1,jdbcType=VARCHAR}, #{image2,jdbcType=VARCHAR},
+      #{image3,jdbcType=VARCHAR}, #{image4,jdbcType=VARCHAR}, #{image5,jdbcType=VARCHAR},
+      #{image6,jdbcType=VARCHAR}, #{image7,jdbcType=VARCHAR}, #{image8,jdbcType=VARCHAR},
+      #{hospdate,jdbcType=TIMESTAMP}, #{hospoperator,jdbcType=VARCHAR}, #{gpsstatus,jdbcType=VARCHAR},
+      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{monitorstatus,jdbcType=VARCHAR},
+      #{enddate,jdbcType=TIMESTAMP}, #{hospnum,jdbcType=INTEGER}, #{checkstatus,jdbcType=VARCHAR},
+      #{checkdate,jdbcType=TIMESTAMP}, #{checkoperator,jdbcType=VARCHAR}, #{checkreason,jdbcType=VARCHAR},
+      #{inid,jdbcType=INTEGER}, #{outstatus,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+      #{operator,jdbcType=VARCHAR}, #{modifydate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR},
+      #{extractstatus,jdbcType=VARCHAR}, #{gpscheckstatus,jdbcType=VARCHAR}, #{lifestatus,jdbcType=VARCHAR},
+      #{supcode1,jdbcType=VARCHAR}, #{supcode2,jdbcType=VARCHAR}, #{supcode3,jdbcType=VARCHAR},
       #{supcode4,jdbcType=VARCHAR}, #{pertype,jdbcType=VARCHAR}, #{areaid,jdbcType=INTEGER}
   </insert>
   <insert id="insertSelective" parameterType="org.jeecg.modules.hospital.monitor.entity.Hospitalmonitor">
@@ -765,5 +765,10 @@
   <select id="selectByPerCode" resultType="java.util.Map">
     select id from hospitalmonitor where status =1 and outstatus=1 and percode = #{percode}
       ORDER BY modifydate desc LIMIT 1
+  </select>
+  <select id="selectNoPassCount" resultType="java.lang.Integer">
+    select count(*) from hospitalmonitor where
+    type='04'
+    and (monitorstatus not in ('1','8'))
   </select>
 </mapper>

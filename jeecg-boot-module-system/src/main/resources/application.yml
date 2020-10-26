@@ -5,7 +5,7 @@ swagger:
   production: false
   basic:
     enable: false
-    password: jeecg1314
+    password: jeecg1314permission/add
 # 第三方登录
 justauth:
   enabled: true

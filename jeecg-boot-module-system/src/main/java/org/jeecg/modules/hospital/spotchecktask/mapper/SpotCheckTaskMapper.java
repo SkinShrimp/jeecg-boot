@@ -7,6 +7,7 @@ import org.jeecg.modules.hospital.spotchecktask.entity.SpotCheckTask;
 import org.jeecg.modules.hospital.spotchecktask.vo.SpotCheckTaskVo;
 import org.jeecg.modules.hospital.utils.TaskState;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface SpotCheckTaskMapper extends BaseMapper<SpotCheckTask> {
@@ -23,4 +24,10 @@ public interface SpotCheckTaskMapper extends BaseMapper<SpotCheckTask> {
     Integer selectCheckUsersCount(Hospitalmonitor hospitalmonitor);
 
     void updateTaskType(Hospitalmonitor hospitalmonitor);
+
+    Integer selectSpotCheckTaskListsCount(HashMap parameterMap);
+
+    List<SpotCheckTaskVo>  selectSpotCheckTaskLists(HashMap parameterMap);
+
+    List<SpotCheckTaskVo> selectSpotCheckTaskListsAll(Hospitalmonitor hospitalmonitor);
 }
