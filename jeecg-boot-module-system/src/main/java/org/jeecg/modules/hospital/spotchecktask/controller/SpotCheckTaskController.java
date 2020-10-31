@@ -61,13 +61,20 @@ public class SpotCheckTaskController extends JeecgController<SpotCheckTask, ISpo
         HashMap parameterMap = Tools.parameterToMap(req);
         Integer count = spotCheckTaskService.spotCheckTaskListsCount(parameterMap);
         List<SpotCheckTaskVo> pageList = spotCheckTaskService.spotCheckTaskLists(parameterMap);
-        Integer num = hospitalmonitorService.selectNoPassCount();
         QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("type","04");
         SpotCheckTaskVo spotCheckTaskVo=null;
         for (int i = 0; i < pageList.size(); i++) {
             spotCheckTaskVo =pageList.get(i);
             if(spotCheckTaskVo!=null && spotCheckTaskVo.getId()!=null){
+                //不通过次数
+                queryWrapper.eq("type","04");
+                queryWrapper.eq("inid",spotCheckTaskVo.getId());
+                queryWrapper.notIn("monitorstatus",1,8);
+                int num =hospitalmonitorService.count(queryWrapper);
+                queryWrapper.clear();
+
+
+                queryWrapper.eq("type","04");
                 queryWrapper.eq("hmid",spotCheckTaskVo.getId());
                 Integer count1 = monitorListService.count(queryWrapper);
                 if(count1!=null) {
@@ -82,6 +89,7 @@ public class SpotCheckTaskController extends JeecgController<SpotCheckTask, ISpo
                 }else {
                     spotCheckTaskVo.setCheckNum(0);
                 }
+                queryWrapper.clear();
                 spotCheckTaskVo.setNotPassNum(num);
                 pageList.set(i,spotCheckTaskVo);
             }
