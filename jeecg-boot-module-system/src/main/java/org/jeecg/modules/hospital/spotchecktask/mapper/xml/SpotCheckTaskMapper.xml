@@ -85,6 +85,7 @@
     <select id="selectSpotCheckTaskListsCount" resultType="java.lang.Integer">
         select count(1) from   hospitalmonitor b
         left join hisinfo c on b.hisid=c.id left join dictionary d on d.id = b.dept
+        left join (select max(f.create_time) as createTime ,f.hm_id from spot_check_task f GROUP BY f.hm_id) m on b.id=m.hm_id
         <where>
             exists(select e.* from spot_check_task e where b.id=e.hm_id)
             <if test="hospitalName != null and hospitalName !=''">
@@ -99,11 +100,24 @@
             <if test="extractstatus != null ">
                 and b.extractstatus = #{extractstatus}
             </if>
+            <if test="inDateBegin != null ">
+                and b.indate &gt;= #{inDateBegin}
+            </if>
+            <if test="inDateEnd != null ">
+                and b.indate &lt;= #{inDateEnd}
+            </if>
+            <if test="spoCheckDateBegin != null ">
+                and m.createTime &gt;= #{spoCheckDateBegin}
+            </if>
+            <if test="spoCheckDateEnd != null ">
+                and m.createTime &lt;= #{spoCheckDateEnd}
+            </if>
         </where>
     </select>
     <select id="selectSpotCheckTaskLists" resultType="org.jeecg.modules.hospital.spotchecktask.vo.SpotCheckTaskVo">
-        select b.id,c.name hospitalName,d.name dictName,b.outstatus,b.extractstatus,b.name,b.sex,b.percode,b.indate from   hospitalmonitor b
+        select m.createTime,b.id,c.name hospitalName,d.name dictName,b.outstatus,b.extractstatus,b.name,b.sex,b.percode,b.indate from   hospitalmonitor b
         left join hisinfo c on b.hisid=c.id left join dictionary d on d.id = b.dept
+        left join (select max(f.create_time) as createTime,f.hm_id from spot_check_task f GROUP BY f.hm_id) m on b.id=m.hm_id
         <where>
         exists(select e.* from spot_check_task e where b.id=e.hm_id)
             <if test="hospitalName != null and hospitalName !=''">
@@ -117,6 +131,18 @@
             </if>
             <if test="extractstatus != null ">
                 and b.extractstatus = #{extractstatus}
+            </if>
+            <if test="inDateBegin != null ">
+                and b.indate &gt;= #{inDateBegin}
+            </if>
+            <if test="inDateEnd != null ">
+                and b.indate &lt;= #{inDateEnd}
+            </if>
+            <if test="spoCheckDateBegin != null ">
+                and m.createTime &gt;= #{spoCheckDateBegin}
+            </if>
+            <if test="spoCheckDateEnd != null ">
+                and m.createTime &lt;= #{spoCheckDateEnd}
             </if>
         </where>
         ORDER BY

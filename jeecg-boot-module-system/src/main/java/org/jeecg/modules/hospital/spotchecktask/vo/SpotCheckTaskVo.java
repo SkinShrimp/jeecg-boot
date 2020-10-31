@@ -17,7 +17,7 @@ public class SpotCheckTaskVo {
     private TaskState taskState;
 
     private Long startTime;
-
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     private Date updateTime;
 

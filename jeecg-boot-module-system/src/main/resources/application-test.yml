@@ -235,3 +235,5 @@ logging:
     org.jeecg.modules.hospital.monitors.mapper : debug
     org.jeecg.modules.hospital.hisuserinfo.mapper: debug
     org.jeecg.modules.hospital.perinfo.mapper: debug
+    org.jeecg.modules.hospital.spotchecktask.mapper: debug
+
