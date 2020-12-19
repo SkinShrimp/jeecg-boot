@@ -51,6 +51,11 @@ public class SpotCheckTaskController extends JeecgController<SpotCheckTask, ISpo
     private IMonitorListService monitorListService;
 
 
+    @GetMapping(value = "/initUser")
+    public Result<?> queryPageList(String code) {
+
+        return Result.OK();
+    }
 
     @GetMapping(value = "/list")
     public Result<?> queryPageList(Hospitalmonitor hospitalmonitor,
@@ -87,7 +92,7 @@ public class SpotCheckTaskController extends JeecgController<SpotCheckTask, ISpo
                 if(count2!=null) {
                     spotCheckTaskVo.setNotUploadedNum(count2);
                 }else {
-                    spotCheckTaskVo.setCheckNum(0);
+                    spotCheckTaskVo.setCheckNum(1);
                 }
                 queryWrapper.clear();
                 spotCheckTaskVo.setNotPassNum(num);

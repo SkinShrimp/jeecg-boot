@@ -63,4 +63,14 @@ public class HospitalmonitorServiceImpl extends ServiceImpl<HospitalmonitorMappe
     public Integer selectNoPassCount() {
         return this.baseMapper.selectNoPassCount();
     }
+
+    @Override
+    public Integer patientBedPercentageCount(HashMap parameterMap) {
+        return this.baseMapper.patientBedPercentageCount(parameterMap);
+    }
+
+    @Override
+    public List patientBedPercentageLists(HashMap parameterMap) {
+        return this.baseMapper.patientBedPercentageLists(parameterMap);
+    }
 }

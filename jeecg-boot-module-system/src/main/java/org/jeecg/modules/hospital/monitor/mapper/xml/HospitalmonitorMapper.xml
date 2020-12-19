@@ -639,7 +639,7 @@
   <select id="selectRelatedMonitors" resultType="org.jeecg.modules.hospital.monitor.vo.MonitorDictHisinfo">
     select a.*,b.name hospitalName,c.name dictName from hospitalmonitor a left join hisinfo b on a.hisid=b.id left join dictionary c on c.id = a.dept
     <where>
-      (a.type='01' OR a.type='05') and a.extractstatus='0' and a.outstatus='1'
+      (a.type='01' OR a.type='05') and a.extractstatus='0' and a.outstatus='1' and a.status='1'
       <if test="percode != null and percode !=''">
         and a.percode like concat('%',#{percode},'%')
       </if>
@@ -680,6 +680,8 @@
         ${column} ${order}
       </when>
       <otherwise>
+        b.NAME ASC,
+        c.NAME ASC,
         a.indate DESC
       </otherwise>
     </choose>
@@ -689,7 +691,7 @@
   <select id="selectRelatedMonitorsCount" resultType="java.lang.Integer">
     select count(1) from hospitalmonitor a left join hisinfo b on a.hisid=b.id left join dictionary c on c.id = a.dept
     <where>
-      (a.type='01' OR a.type='05') and a.extractstatus='0' and a.outstatus='1'
+      (a.type='01' OR a.type='05') and a.extractstatus='0' and a.outstatus='1'  and a.status='1'
       <if test="percode != null and percode !=''">
        and a.percode like concat('%',#{percode},'%')
       </if>
@@ -770,5 +772,85 @@
     select count(*) from hospitalmonitor where
     type='04'
     and (monitorstatus not in ('1','8'))
+  </select>
+
+
+  <select id="patientBedPercentageLists" resultType="org.jeecg.modules.hospital.monitor.vo.PatientBedVo">
+      SELECT
+          b.NAME hospitalName,
+          b.CODE hospitalCode,
+          c.NAME department,
+          d.bed beds,
+          aa.num numPeopleInhos,
+          aa.num / d.bed * 100 occupationRate
+      FROM
+          (
+          SELECT
+              a.dept,
+              a.hisid,
+              count( 1 ) num
+          FROM
+              hospitalmonitor a
+          WHERE
+              a.type = '01'
+              AND a.STATUS = 1
+              AND a.outstatus = 1
+          GROUP BY
+              a.dept,
+              a.hisid
+          ) aa
+          LEFT JOIN hisinfo b ON aa.hisid = b.id
+          LEFT JOIN dictionary c ON c.id = aa.dept
+          LEFT JOIN hisdeptbedinfo d ON b.id = d.hisid
+          AND aa.dept = d.dept
+    <where>
+      <if test="hospitalName != null and hospitalName !=''">
+        and b.name like concat('%', #{hospitalName},'%')
+      </if>
+      <if test="hospitalCode != null and hospitalCode !=''">
+        and b.code  like concat('%', #{hospitalCode},'%')
+      </if>
+    </where>
+    ORDER BY
+    <choose>
+      <when test="column!=null">
+        ${column} ${order}
+      </when>
+      <otherwise>
+        b.name,b.code DESC
+      </otherwise>
+    </choose>
+    <if test="startIndex!=null and pageSize!=null">
+     LIMIT ${startIndex}, ${pageSize}
+    </if>
+  </select>
+  <select id="patientBedPercentageCount" resultType="java.lang.Integer">
+     SELECT
+            count(1)
+      FROM
+          (
+          SELECT
+              a.dept,
+              a.hisid,
+              count( 1 ) num
+          FROM
+              hospitalmonitor a
+          WHERE
+              a.type = '01'
+              AND a.STATUS = 1
+              AND a.outstatus = 1
+          GROUP BY
+              a.dept,
+              a.hisid
+          ) aa
+          LEFT JOIN hisinfo b ON aa.hisid = b.id
+      <where>
+        <if test="hospitalName != null and hospitalName !=''">
+          and b.name like concat('%', #{hospitalName},'%')
+        </if>
+        <if test="hospitalCode != null and hospitalCode !=''">
+          and b.code  like concat('%', #{hospitalCode},'%')
+        </if>
+      </where>
   </select>
 </mapper>

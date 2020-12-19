@@ -33,4 +33,7 @@ public interface IHospitalmonitorService extends IService<Hospitalmonitor> {
 
     Integer selectNoPassCount();
 
+    Integer patientBedPercentageCount(HashMap parameterMap);
+
+    List patientBedPercentageLists(HashMap parameterMap);
 }

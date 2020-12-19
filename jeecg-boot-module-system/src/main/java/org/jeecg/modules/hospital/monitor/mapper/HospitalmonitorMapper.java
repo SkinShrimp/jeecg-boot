@@ -31,4 +31,8 @@ public interface HospitalmonitorMapper extends BaseMapper<Hospitalmonitor> {
     Map selectByPerCode(Hospitalmonitor hospitalmonitor);
 
     Integer selectNoPassCount();
+
+    Integer patientBedPercentageCount(HashMap parameterMap);
+
+    List patientBedPercentageLists(HashMap parameterMap);
 }
