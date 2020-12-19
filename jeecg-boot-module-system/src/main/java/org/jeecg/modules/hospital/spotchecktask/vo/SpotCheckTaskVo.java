@@ -46,13 +46,14 @@ public class SpotCheckTaskVo {
     @Excel(name = "入院日期", width = 20, format = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     private Date indate;
+    @Excel(name = "抽查时间", width = 20)
+    private String numUpdateTime;//一次住院多次抽查，拼起来的时间
     @Excel(name = "抽查次数", width = 20)
     private Integer checkNum;//抽查次数
     @Excel(name = "未上传次数", width = 20)
     private Integer notUploadedNum;//未上传次数
     @Excel(name = "次数不通过次数", width = 20)
     private Integer notPassNum;//次数不通过次数
-
 
 
 
@@ -106,4 +107,5 @@ public class SpotCheckTaskVo {
     public void setSex(Integer sex) {
         this.sex = sex;
     }
+
 }

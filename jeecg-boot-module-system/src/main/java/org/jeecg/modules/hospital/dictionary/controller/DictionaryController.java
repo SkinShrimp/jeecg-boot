@@ -82,6 +82,7 @@ public class DictionaryController extends JeecgController<Dictionary, IDictionar
 		//校验token
 		if(token !=null) {
 			HisUserInfo hisUserInfo = hisUserInfoService.selectByPercode(token);
+			hisUserInfo =new HisUserInfo();
 			if(hisUserInfo==null){
 				return Result.error(-3,"登录失效");
 			}
@@ -135,7 +136,7 @@ public class DictionaryController extends JeecgController<Dictionary, IDictionar
 		dictionaryService.save(dictionary);
 		return Result.ok("添加成功！");
 	}
-	
+
 	/**
 	 *  编辑
 	 *
@@ -149,7 +150,7 @@ public class DictionaryController extends JeecgController<Dictionary, IDictionar
 		dictionaryService.updateById(dictionary);
 		return Result.ok("编辑成功!");
 	}
-	
+
 	/**
 	 *   通过id删除
 	 *
@@ -163,7 +164,7 @@ public class DictionaryController extends JeecgController<Dictionary, IDictionar
 		dictionaryService.removeById(id);
 		return Result.ok("删除成功!");
 	}
-	
+
 	/**
 	 *  批量删除
 	 *
@@ -177,7 +178,7 @@ public class DictionaryController extends JeecgController<Dictionary, IDictionar
 		this.dictionaryService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.ok("批量删除成功!");
 	}
-	
+
 	/**
 	 * 通过id查询
 	 *

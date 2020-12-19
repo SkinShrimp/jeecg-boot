@@ -29,5 +29,5 @@ public interface SpotCheckTaskMapper extends BaseMapper<SpotCheckTask> {
 
     List<SpotCheckTaskVo>  selectSpotCheckTaskLists(HashMap parameterMap);
 
-    List<SpotCheckTaskVo> selectSpotCheckTaskListsAll(Hospitalmonitor hospitalmonitor);
+    List<SpotCheckTaskVo> selectSpotCheckTaskListsAll(HashMap parameterMap);
 }

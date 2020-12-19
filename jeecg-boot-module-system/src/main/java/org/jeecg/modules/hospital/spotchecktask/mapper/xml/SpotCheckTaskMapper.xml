@@ -85,7 +85,7 @@
     <select id="selectSpotCheckTaskListsCount" resultType="java.lang.Integer">
         select count(1) from   hospitalmonitor b
         left join hisinfo c on b.hisid=c.id left join dictionary d on d.id = b.dept
-        left join (select max(f.create_time) as createTime ,f.hm_id from spot_check_task f GROUP BY f.hm_id) m on b.id=m.hm_id
+        left join (select max(f.update_time) as updateTime ,min(f.update_time) as minUpdateTime,f.hm_id from spot_check_task f GROUP BY f.hm_id) m on b.id=m.hm_id
         <where>
             exists(select e.* from spot_check_task e where b.id=e.hm_id)
             <if test="hospitalName != null and hospitalName !=''">
@@ -106,18 +106,19 @@
             <if test="inDateEnd != null ">
                 and b.indate &lt;= #{inDateEnd}
             </if>
-            <if test="spoCheckDateBegin != null ">
-                and m.createTime &gt;= #{spoCheckDateBegin}
-            </if>
-            <if test="spoCheckDateEnd != null ">
-                and m.createTime &lt;= #{spoCheckDateEnd}
+            <if test="spoCheckDateBegin != null and spoCheckDateEnd != null">
+                and (m.updateTime between #{spoCheckDateBegin} and #{spoCheckDateEnd}
+                or m.minUpdateTime between #{spoCheckDateBegin} and #{spoCheckDateEnd})
             </if>
         </where>
     </select>
     <select id="selectSpotCheckTaskLists" resultType="org.jeecg.modules.hospital.spotchecktask.vo.SpotCheckTaskVo">
-        select m.createTime,b.id,c.name hospitalName,d.name dictName,b.outstatus,b.extractstatus,b.name,b.sex,b.percode,b.indate from   hospitalmonitor b
+        select m.checkNum,m.updateTime,m.numUpdateTime,b.id,c.name hospitalName,d.name dictName,b.outstatus,b.extractstatus,b.name,b.sex,b.percode,b.indate,
+        (select count(1) from hospitalmonitor j where j.type='04' and j.monitorstatus not in (1,8) and j.inid=b.id and  j.status=1) as notPassNum,
+        (select count(1) from monitorlist k where k.type='04' and k.hospstatus=0 and k.hmid=b.id and k.status=1) notUploadedNum
+        from   hospitalmonitor b
         left join hisinfo c on b.hisid=c.id left join dictionary d on d.id = b.dept
-        left join (select max(f.create_time) as createTime,f.hm_id from spot_check_task f GROUP BY f.hm_id) m on b.id=m.hm_id
+        left join (select max(f.update_time) as updateTime,min(f.update_time) as minUpdateTime,GROUP_CONCAT(update_time SEPARATOR '|'  ) numUpdateTime,f.hm_id,count(hm_id) checkNum from spot_check_task f GROUP BY f.hm_id) m on b.id=m.hm_id
         <where>
         exists(select e.* from spot_check_task e where b.id=e.hm_id)
             <if test="hospitalName != null and hospitalName !=''">
@@ -138,11 +139,9 @@
             <if test="inDateEnd != null ">
                 and b.indate &lt;= #{inDateEnd}
             </if>
-            <if test="spoCheckDateBegin != null ">
-                and m.createTime &gt;= #{spoCheckDateBegin}
-            </if>
-            <if test="spoCheckDateEnd != null ">
-                and m.createTime &lt;= #{spoCheckDateEnd}
+            <if test="spoCheckDateBegin != null and spoCheckDateEnd != null">
+                and (m.updateTime between #{spoCheckDateBegin} and #{spoCheckDateEnd}
+                or m.minUpdateTime between #{spoCheckDateBegin} and #{spoCheckDateEnd})
             </if>
         </where>
         ORDER BY
@@ -151,15 +150,23 @@
                 ${column} ${order}
             </when>
             <otherwise>
-                b.extractstatus DESC
+                b.outstatus ASC,
+                b.extractstatus DESC,
+                c.name ASC,
+                d.name ASC,
+                m.updateTime DESC
             </otherwise>
         </choose>
         LIMIT ${startIndex}, ${pageSize}
     </select>
 
     <select id="selectSpotCheckTaskListsAll" resultType="org.jeecg.modules.hospital.spotchecktask.vo.SpotCheckTaskVo">
-        select b.id,c.name hospitalName,d.name dictName,b.outstatus,b.extractstatus,b.name,b.sex,b.percode,b.indate from   hospitalmonitor b
+        select m.checkNum,m.updateTime,m.numUpdateTime,b.id,c.name hospitalName,d.name dictName,b.outstatus,b.extractstatus,b.name,b.sex,b.percode,b.indate,
+        (select count(1) from hospitalmonitor j where j.type='04' and j.monitorstatus not in (1,8) and j.inid=b.id and  j.status=1) as notPassNum,
+        (select count(1) from monitorlist k where k.type='04' and k.hospstatus=0 and k.hmid=b.id and k.status=1) notUploadedNum
+        from   hospitalmonitor b
         left join hisinfo c on b.hisid=c.id left join dictionary d on d.id = b.dept
+        left join (select max(f.update_time) as updateTime,min(f.update_time) as minUpdateTime,GROUP_CONCAT(update_time SEPARATOR '|'  ) numUpdateTime,f.hm_id,count(hm_id) checkNum from spot_check_task f GROUP BY f.hm_id) m on b.id=m.hm_id
         <where>
             exists(select e.* from spot_check_task e where b.id=e.hm_id)
             <if test="hospitalName != null and hospitalName !=''">
@@ -174,6 +181,29 @@
             <if test="extractstatus != null ">
                 and b.extractstatus = #{extractstatus}
             </if>
+            <if test="inDateBegin != null ">
+                and b.indate &gt;= #{inDateBegin}
+            </if>
+            <if test="inDateEnd != null ">
+                and b.indate &lt;= #{inDateEnd}
+            </if>
+            <if test="spoCheckDateBegin != null and spoCheckDateEnd != null">
+                and (m.updateTime between #{spoCheckDateBegin} and #{spoCheckDateEnd}
+                or m.minUpdateTime between #{spoCheckDateBegin} and #{spoCheckDateEnd})
+            </if>
         </where>
+        ORDER BY
+        <choose>
+            <when test="column!=null">
+                ${column} ${order}
+            </when>
+            <otherwise>
+                b.outstatus ASC,
+                b.extractstatus DESC,
+                c.name ASC,
+                d.name ASC,
+                m.updateTime DESC
+            </otherwise>
+        </choose>
     </select>
 </mapper>

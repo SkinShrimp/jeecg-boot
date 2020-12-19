@@ -66,39 +66,6 @@ public class SpotCheckTaskController extends JeecgController<SpotCheckTask, ISpo
         HashMap parameterMap = Tools.parameterToMap(req);
         Integer count = spotCheckTaskService.spotCheckTaskListsCount(parameterMap);
         List<SpotCheckTaskVo> pageList = spotCheckTaskService.spotCheckTaskLists(parameterMap);
-        QueryWrapper queryWrapper = new QueryWrapper();
-        SpotCheckTaskVo spotCheckTaskVo=null;
-        for (int i = 0; i < pageList.size(); i++) {
-            spotCheckTaskVo =pageList.get(i);
-            if(spotCheckTaskVo!=null && spotCheckTaskVo.getId()!=null){
-                //不通过次数
-                queryWrapper.eq("type","04");
-                queryWrapper.eq("inid",spotCheckTaskVo.getId());
-                queryWrapper.notIn("monitorstatus",1,8);
-                int num =hospitalmonitorService.count(queryWrapper);
-                queryWrapper.clear();
-
-
-                queryWrapper.eq("type","04");
-                queryWrapper.eq("hmid",spotCheckTaskVo.getId());
-                Integer count1 = monitorListService.count(queryWrapper);
-                if(count1!=null) {
-                    spotCheckTaskVo.setCheckNum(count1);
-                }else {
-                    spotCheckTaskVo.setCheckNum(0);
-                }
-                queryWrapper.eq("hospstatus",0);
-                Integer count2 = monitorListService.count(queryWrapper);
-                if(count2!=null) {
-                    spotCheckTaskVo.setNotUploadedNum(count2);
-                }else {
-                    spotCheckTaskVo.setCheckNum(1);
-                }
-                queryWrapper.clear();
-                spotCheckTaskVo.setNotPassNum(num);
-                pageList.set(i,spotCheckTaskVo);
-            }
-        }
         page.setSize(pageSize);
         page.setCurrent(pageNo);
         page.setTotal(count);
@@ -227,33 +194,8 @@ public class SpotCheckTaskController extends JeecgController<SpotCheckTask, ISpo
     }
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, Hospitalmonitor hospitalmonitor) {
-
-        List<SpotCheckTaskVo> pageList = spotCheckTaskService.spotCheckTaskListsAll(hospitalmonitor);
-        Integer num = hospitalmonitorService.selectNoPassCount();
-        QueryWrapper queryWrapper = new QueryWrapper();
-        queryWrapper.eq("type","04");
-        SpotCheckTaskVo spotCheckTaskVo=null;
-        for (int i = 0; i < pageList.size(); i++) {
-            spotCheckTaskVo =pageList.get(i);
-            if(spotCheckTaskVo!=null && spotCheckTaskVo.getId()!=null){
-                queryWrapper.eq("hmid",spotCheckTaskVo.getId());
-                Integer count1 = monitorListService.count(queryWrapper);
-                if(count1!=null) {
-                    spotCheckTaskVo.setCheckNum(count1);
-                }else {
-                    spotCheckTaskVo.setCheckNum(0);
-                }
-                queryWrapper.eq("hospstatus",0);
-                Integer count2 = monitorListService.count(queryWrapper);
-                if(count2!=null) {
-                    spotCheckTaskVo.setNotUploadedNum(count2);
-                }else {
-                    spotCheckTaskVo.setCheckNum(0);
-                }
-                spotCheckTaskVo.setNotPassNum(num);
-                pageList.set(i,spotCheckTaskVo);
-            }
-        }
+        HashMap parameterMap = Tools.parameterToMap(request);
+        List<SpotCheckTaskVo> pageList = spotCheckTaskService.spotCheckTaskListsAll(parameterMap);
         // Step.3 AutoPoi 导出Excel
         ModelAndView mv = new ModelAndView(new JeecgEntityExcelView());
         mv.addObject(NormalExcelConstants.FILE_NAME, "抽查表"); //此处设置的filename无效 ,前端会重更新设置一下

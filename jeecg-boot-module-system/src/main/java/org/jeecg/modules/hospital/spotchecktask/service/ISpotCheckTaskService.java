@@ -26,5 +26,5 @@ public interface ISpotCheckTaskService extends IService<SpotCheckTask> {
 
     List<SpotCheckTaskVo> spotCheckTaskLists(HashMap parameterMap);
 
-    List<SpotCheckTaskVo> spotCheckTaskListsAll(Hospitalmonitor hospitalmonitor);
+    List<SpotCheckTaskVo> spotCheckTaskListsAll(HashMap hashMap);
 }

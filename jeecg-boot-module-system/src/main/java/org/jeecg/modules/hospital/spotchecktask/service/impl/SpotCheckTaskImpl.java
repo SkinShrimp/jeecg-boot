@@ -60,8 +60,8 @@ public class SpotCheckTaskImpl  extends ServiceImpl<SpotCheckTaskMapper, SpotChe
     }
 
     @Override
-    public List<SpotCheckTaskVo> spotCheckTaskListsAll(Hospitalmonitor hospitalmonitor) {
-        return this.baseMapper.selectSpotCheckTaskListsAll(hospitalmonitor);
+    public List<SpotCheckTaskVo> spotCheckTaskListsAll(HashMap parameterMap) {
+        return this.baseMapper.selectSpotCheckTaskListsAll(parameterMap);
     }
 
 
